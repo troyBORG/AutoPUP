@@ -161,9 +161,9 @@ windower.register_event('addon command', function(...)
 			else
 				addon_message('Invalid maneuver name.')
 			end
-		 elseif type(settings[commandArgs[1]]) == 'number' and commandArgs[2] and tonumber(commandArgs[2]) then
-				settings[commandArgs[1]] = tonumber(commandArgs[2])
-				addon_message('%s is now set to %d':format(commandArgs[1],settings[commandArgs[1]]))
+		elseif type(settings[commandArgs[1]]) == 'number' and commandArgs[2] and tonumber(commandArgs[2]) then
+			settings[commandArgs[1]] = tonumber(commandArgs[2])
+			addon_message('%s is now set to %d':format(commandArgs[1],settings[commandArgs[1]]))
 		elseif type(settings[commandArgs[1]]) == 'boolean' then
 			if (not commandArgs[2] and settings[commandArgs[1]] == true) or (commandArgs[2] and commandArgs[2] == 'off') then
 				settings[commandArgs[1]] = false
