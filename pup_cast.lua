@@ -26,13 +26,13 @@ end
 function cast.check_maneuver(maneuvers,targ,buffs,ability_recasts)
 	local maneuver_list = get.maneuver_list(maneuvers)
 	for buff,num in pairs(maneuver_list) do
-	local count = cast.check_maneuver_count(buff, buffs)
-	if count < num then
-		local maneuver = get.maneuver(get.maneuvers[buff][1])
-		if maneuver and ability_recasts[210] <= 0 then -- 210 is Maneuvers JA
-			return maneuver.enl
+		local count = cast.check_maneuver_count(buff, buffs)
+		if count < num then
+			local maneuver = get.maneuver(get.maneuvers[buff][1])
+			if maneuver and ability_recasts[210] <= 0 then -- 210 is Maneuvers JA
+				return maneuver.enl
+			end
 		end
-	end
 	end
 	return false
 end
