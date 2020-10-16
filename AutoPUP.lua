@@ -57,10 +57,12 @@ function do_stuff()
     if counter > del then
         counter = 0
         del = interval
-        local play = windower.ffxi.get_player()
-        if not play or play.main_job ~= 'PUP' or (play.status ~= 1 and play.status ~= 0) then return end
-		if play ~= nil then
-			local player_mob = windower.ffxi.get_mob_by_id(play.id)
+        local player = windower.ffxi.get_player()
+				-- if can't get player, we're not PUP or status is not equal to 1 or 0 then end
+        if not player or player.main_job ~= 'PUP' or (player.status ~= 1 and player.status ~= 0) then return end
+		-- check we have a pet?
+		if player ~= nil then
+			local player_mob = windower.ffxi.get_mob_by_id(player.id)
 			if player_mob ~= nil then
 				local pet_index = player_mob.pet_index
 				if pet_index == nil then return end
