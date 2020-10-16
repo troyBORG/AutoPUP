@@ -73,9 +73,9 @@ function do_stuff()
 		if autocooldown and buffs.overload and ability_recasts[114] <= 0 then -- Cooldown
 				cast.JA('input /ja "Cooldown" <me>')
 		end
-        if casting or buffs.stun or buffs.sleep or buffs.charm or buffs.terror or buffs.petrification or buffs.overload then return end
-        
-		local maneuver = cast.check_maneuver(settings.maneuvers,'AoE',buffs,ability_recasts) 
+    if casting or resting or buffs.stun or buffs.sleep or buffs.charm or buffs.terror or buffs.petrification or buffs.overload then return end
+
+		local maneuver = cast.check_maneuver(settings.maneuvers,'AoE',buffs,ability_recasts)
 		if maneuver then cast.maneuver(maneuver,'<me>',buffs,ability_recasts) return end
     end
 end
