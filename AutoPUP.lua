@@ -35,6 +35,9 @@ local display_box = function()
     else
         str = 'AutoPUP: Actions [Off]'
     end
+		if resting then
+				str = 'AutoPUP: Actions [Paused]'
+		end
     if not settings.active then return str end
     for k,v in pairs(settings.maneuvers) do
         str = str..'\n %s:[x%d]':format(k:ucfirst(),v)
@@ -182,6 +185,7 @@ end)
 function event_change()
     settings.actions = false
     casting = false
+		resting = false
     pup_status:text(display_box())
 end
 
@@ -190,6 +194,10 @@ function status_change(new,old)
     if new == 2 or new == 3 then
         event_change()
     end
+		if new == 'Resting' then
+			resting = true
+			addon_message('Paused.')
+		end
 end
 
 windower.register_event('status change', status_change)
