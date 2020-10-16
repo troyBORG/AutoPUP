@@ -27,7 +27,6 @@ settings = config.load(default)
 del = 0
 counter = 0
 interval = 0.2
-last_coords = 'fff':pack(0,0,0)
 
 local display_box = function()
     local str
@@ -109,13 +108,6 @@ windower.register_event('incoming chunk', function(id,original,modified,injected
     elseif id == 0x029 then
         local packet = packets.parse('incoming', original)
         --table.vprint(packet)
-    end
-end)
-
-windower.register_event('outgoing chunk', function(id,data,modified,is_injected,is_blocked)
-    if id == 0x015 then
-        is_moving = last_coords ~= modified:sub(5, 16)
-        last_coords = modified:sub(5, 16)
     end
 end)
 
