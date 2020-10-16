@@ -46,8 +46,11 @@ pup_status = texts.new(display_box(),settings.box,settings)
 pup_status:show()
 
 function do_stuff()
+		-- stop if actions not set
     if not settings.actions then return end
+		-- increment counter
     counter = counter + interval
+		-- wtf is del?
     if counter > del then
         counter = 0
         del = interval
@@ -77,6 +80,7 @@ end
 do_stuff:loop(interval)
 
 windower.register_event('incoming chunk', function(id,original,modified,injected,blocked)
+  	-- this checks if we're casting
     if id == 0x028 then
         local packet = packets.parse('incoming', original)
         if packet['Actor'] ~= windower.ffxi.get_mob_by_target('me').id then return false end
