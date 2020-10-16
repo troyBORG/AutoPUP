@@ -17,6 +17,7 @@ cast = require('pup_cast')
 default = {
 	delay=1,
     active=true,
+		autocooldown=false,
     maneuvers={wind=1,light=1,fire=1},
     box={text={size=10}}
     }
@@ -66,14 +67,12 @@ function do_stuff()
 				if pet_index == nil then return end
             end
 		end
-		if buffs.overload then
-			if ability_recasts[114] <= 0 then -- Cooldown
 		-- get buffs
     local buffs = get.buffs(player.buffs)
 		-- get recasts
     local ability_recasts = windower.ffxi.get_ability_recasts()
+		if autocooldown and buffs.overload and ability_recasts[114] <= 0 then -- Cooldown
 				cast.JA('input /ja "Cooldown" <me>')
-			end
 		end
         if casting or buffs.stun or buffs.sleep or buffs.charm or buffs.terror or buffs.petrification or buffs.overload then return end
         
