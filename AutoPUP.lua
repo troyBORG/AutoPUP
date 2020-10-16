@@ -118,23 +118,25 @@ function addon_message(str)
 end
 
 windower.register_event('addon command', function(...)
-    local commands = {...}
-    for x=1,#commands do commands[x] = windower.convert_auto_trans(commands[x]):lower() end
-    if not commands[1] or S{'on','off'}:contains(commands[1]) then
-        if not commands[1] then
+    local commandArgs = {...}
+    for x=1,#commandArgs do commandArgs[x] = windower.convert_auto_trans(commandArgs[x]):lower() end
+		-- handle toggle with addon name and on/off
+    if not commandArgs[1] or S{'on','off'}:contains(commandArgs[1]) then
+        if not commandArgs[1] then
             settings.actions = not settings.actions
-        elseif commands[1] == 'on' then
+        elseif commandArgs[1] == 'on' then
             settings.actions = true
-        elseif commands[1] == 'off' then
+        elseif commandArgs[1] == 'off' then
             settings.actions = false
         end
         addon_message('Actions %s':format(settings.actions and 'On' or 'Off'))
     else
-        if commands[1] == 'save' then
+				-- dunno how this works
+        if commandArgs[1] == 'save' then
             settings:save()
             addon_message('settings Saved.')
-        elseif get.maneuvers[commands[1]] and commands[2] then
-            local n = tonumber(commands[2])
+        elseif get.maneuvers[commandArgs[1]] and commandArgs[2] then
+            local n = tonumber(commandArgs[2])
             if n and n ~= 0 and n <= 3 then
 				local total_man = 0
 				for k,v in pairs(settings.maneuvers) do
@@ -143,35 +145,35 @@ windower.register_event('addon command', function(...)
 				if total_man + n > 3 then
 					addon_message('Total maneuvers count (%d) exceeds 3':format(total_man + n))
 				else
-					settings.maneuvers[commands[1]] = n
-					addon_message('%s x%d':format(commands[1],n))
+					settings.maneuvers[commandArgs[1]] = n
+					addon_message('%s x%d':format(commandArgs[1],n))
 				end
-            elseif commands[2] == '0' or commands[2] == 'off' then              
-				settings.maneuvers[commands[1]] = nil
-				addon_message('%s Off':format(commands[1]))
+            elseif commandArgs[2] == '0' or commandArgs[2] == 'off' then
+				settings.maneuvers[commandArgs[1]] = nil
+				addon_message('%s Off':format(commandArgs[1]))
             elseif n then
-                addon_message('Error: %d exceeds the maximum value for %s.':format(n,commands[1]))
+                addon_message('Error: %d exceeds the maximum value for %s.':format(n,commandArgs[1]))
             end
-        elseif type(settings[commands[1]]) == 'string' and commands[2] then
-            local maneuver = get.maneuver(table.concat(commands, ' ',2))
+        elseif type(settings[commandArgs[1]]) == 'string' and commandArgs[2] then
+            local maneuver = get.maneuver(table.concat(commandArgs, ' ',2))
             if maneuver then
-                settings[commands[1]] = maneuver.enl
-                addon_message('%s is now set to %s':format(commands[1],maneuver.enl))
+                settings[commandArgs[1]] = maneuver.enl
+                addon_message('%s is now set to %s':format(commandArgs[1],maneuver.enl))
             else
                 addon_message('Invalid maneuver name.')
             end
-       elseif type(settings[commands[1]]) == 'number' and commands[2] and tonumber(commands[2]) then
-            settings[commands[1]] = tonumber(commands[2])
-            addon_message('%s is now set to %d':format(commands[1],settings[commands[1]]))
-        elseif type(settings[commands[1]]) == 'boolean' then
-            if (not commands[2] and settings[commands[1]] == true) or (commands[2] and commands[2] == 'off') then
-                settings[commands[1]] = false
-            elseif (not commands[2]) or (commands[2] and commands[2] == 'on') then
-                settings[commands[1]] = true
+       elseif type(settings[commandArgs[1]]) == 'number' and commandArgs[2] and tonumber(commandArgs[2]) then
+            settings[commandArgs[1]] = tonumber(commandArgs[2])
+            addon_message('%s is now set to %d':format(commandArgs[1],settings[commandArgs[1]]))
+        elseif type(settings[commandArgs[1]]) == 'boolean' then
+            if (not commandArgs[2] and settings[commandArgs[1]] == true) or (commandArgs[2] and commandArgs[2] == 'off') then
+                settings[commandArgs[1]] = false
+            elseif (not commandArgs[2]) or (commandArgs[2] and commandArgs[2] == 'on') then
+                settings[commandArgs[1]] = true
             end
-            addon_message('%s %s':format(commands[1],settings[commands[1]] and 'On' or 'Off'))
-        elseif commands[1] == 'eval' then
-            assert(loadstring(table.concat(commands, ' ',2)))()
+            addon_message('%s %s':format(commandArgs[1],settings[commandArgs[1]] and 'On' or 'Off'))
+        elseif commandArgs[1] == 'eval' then
+            assert(loadstring(table.concat(commandArgs, ' ',2)))()
         end
     end
     pup_status:text(display_box())
