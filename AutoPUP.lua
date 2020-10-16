@@ -15,21 +15,29 @@ get = require('pup_get')
 cast = require('pup_cast')
 
 default = {
+	-- set the delay
 	delay=1,
 	active=true,
+	-- toggle automatic cooldown on overload
 	autocooldown=false,
+	-- default maneuvers
 	maneuvers={wind=1,light=1,fire=1},
+	-- text size
 	box={text={size=10}}
 	}
 
 settings = config.load(default)
 
+-- no idea
 del = 0
+-- a counter?
 counter = 0
+-- how often to run do_stuff()
 interval = 0.2
 
 local display_box = function()
 	local str
+	-- set the status string
 	if settings.actions then
 			str = 'AutoPUP: Actions [On]'
 	else
@@ -38,7 +46,9 @@ local display_box = function()
 	if resting then
 			str = 'AutoPUP: Actions [Paused]'
 	end
+	-- do nothing if show active maneuvers is Off
 	if not settings.active then return str end
+	-- show active maneuvers
 	for k,v in pairs(settings.maneuvers) do
 			str = str..'\n %s:[x%d]':format(k:ucfirst(),v)
 	end
@@ -51,9 +61,9 @@ pup_status:show()
 function do_stuff()
 	-- stop if actions not set
 	if not settings.actions then return end
-	-- increment counter
+	-- update the interval since do_stuff last run
 	counter = counter + interval
-	-- wtf is del?
+	-- if the interval since last do_stuff is more than some delay (del) then try and run again
 	if counter > del then
 		counter = 0
 		del = interval
@@ -75,7 +85,9 @@ function do_stuff()
 		if autocooldown and buffs.overload and ability_recasts[114] <= 0 then -- Cooldown
 				cast.JA('input /ja "Cooldown" <me>')
 		end
+		-- do nothing if we can't do anything
 		if casting or resting or buffs.amnesia or buffs.stun or buffs.sleep or buffs.charm or buffs.terror or buffs.petrification or buffs.overload then return end
+		-- cast from pup_cast.lua
 		local maneuver = cast.check_maneuver(settings.maneuvers,'AoE',buffs,ability_recasts)
 		if maneuver then cast.maneuver(maneuver,'<me>',buffs,ability_recasts) return end
 	end
@@ -118,6 +130,7 @@ end
 
 windower.register_event('addon command', function(...)
 	local commandArgs = {...}
+	-- convert any autotrans in Args and overwrite Arg
 	for x=1,#commandArgs do commandArgs[x] = windower.convert_auto_trans(commandArgs[x]):lower() end
 	-- handle toggle with addon name and on/off
 	if not commandArgs[1] or S{'on','off'}:contains(commandArgs[1]) then
@@ -134,33 +147,45 @@ windower.register_event('addon command', function(...)
 		if commandArgs[1] == 'save' then
 			settings:save()
 			addon_message('settings Saved.')
+		-- get.maneuvers from pup_get.lua - check commandArgs[1] is a valid short maneuver name
 		elseif get.maneuvers[commandArgs[1]] and commandArgs[2] then
+			-- store this int to n
 			local n = tonumber(commandArgs[2])
-			if n and n ~= 0 and n <= 3 then
+			-- check n is between 1 and 3
+			if n and n ~= 0 and n <= 3 then -- surely we just set n so why check?
+				-- count how many maneuvers are currently set
 				local total_man = 0
 				for k,v in pairs(settings.maneuvers) do
 					total_man = total_man + v
 				end
+				-- store or error if too many
 				if total_man + n > 3 then
 					addon_message('Total maneuvers count (%d) exceeds 3':format(total_man + n))
 				else
 					settings.maneuvers[commandArgs[1]] = n
 					addon_message('%s x%d':format(commandArgs[1],n))
 				end
+			-- remove all commandArgs[1] maneuvers
 			elseif commandArgs[2] == '0' or commandArgs[2] == 'off' then
 				settings.maneuvers[commandArgs[1]] = nil
 				addon_message('%s Off':format(commandArgs[1]))
-			elseif n then
+			-- throw an error
+			elseif n then  -- we set n so why check?
 				addon_message('Error: %d exceeds the maximum value for %s.':format(n,commandArgs[1]))
 			end
+		-- commandArgs[1] doesn't match a short maneuver name so check it's a string
 		elseif type(settings[commandArgs[1]]) == 'string' and commandArgs[2] then
 			local maneuver = get.maneuver(table.concat(commandArgs, ' ',2))
+			-- check string matches a long maneuver name
 			if maneuver then
+				-- store if it does
 				settings[commandArgs[1]] = maneuver.enl
 				addon_message('%s is now set to %s':format(commandArgs[1],maneuver.enl))
 			else
+				-- otherwise error
 				addon_message('Invalid maneuver name.')
 			end
+		-- wtf does this do?!
 		elseif type(settings[commandArgs[1]]) == 'number' and commandArgs[2] and tonumber(commandArgs[2]) then
 			settings[commandArgs[1]] = tonumber(commandArgs[2])
 			addon_message('%s is now set to %d':format(commandArgs[1],settings[commandArgs[1]]))
@@ -171,6 +196,7 @@ windower.register_event('addon command', function(...)
 				settings[commandArgs[1]] = true
 			end
 			addon_message('%s %s':format(commandArgs[1],settings[commandArgs[1]] and 'On' or 'Off'))
+		-- some debug option!
 		elseif commandArgs[1] == 'eval' then
 			assert(loadstring(table.concat(commandArgs, ' ',2)))()
 		end

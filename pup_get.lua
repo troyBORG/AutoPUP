@@ -21,6 +21,7 @@ end
 
 function get.maneuver(name)
 	name = string.lower(name)
+	-- ids from pup_ids.lua
 	for k,v in pairs(ids.maneuvers) do
 		if k ~= 'n' and string.lower(v) == name then
 			return {id=k,enl=v}
