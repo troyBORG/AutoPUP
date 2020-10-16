@@ -39,12 +39,12 @@ local display_box = function()
 	local str
 	-- set the status string
 	if settings.actions then
-			str = 'AutoPUP: Actions [On]'
+			str = _addon.name..': Actions [On]'
 	else
-			str = 'AutoPUP: Actions [Off]'
+			str = _addon.name..': Actions [Off]'
 	end
 	if resting then
-			str = 'AutoPUP: Actions [Paused]'
+			str = _addon.name..': Actions [Paused]'
 	end
 	-- do nothing if show active maneuvers is Off
 	if not settings.active then return str end
