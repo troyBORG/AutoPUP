@@ -66,10 +66,12 @@ function do_stuff()
 				if pet_index == nil then return end
             end
 		end
-        local buffs = get.buffs(play.buffs)
-        local ability_recasts = windower.ffxi.get_ability_recasts()
 		if buffs.overload then
 			if ability_recasts[114] <= 0 then -- Cooldown
+		-- get buffs
+    local buffs = get.buffs(player.buffs)
+		-- get recasts
+    local ability_recasts = windower.ffxi.get_ability_recasts()
 				cast.JA('input /ja "Cooldown" <me>')
 			end
 		end
