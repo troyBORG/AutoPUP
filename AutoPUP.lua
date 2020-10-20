@@ -20,6 +20,8 @@ default = {
 	active=true,
 	-- toggle automatic cooldown on overload
 	autocooldown=false,
+	-- toggle actions off on overload
+	autooff=true,
 	-- default maneuvers
 	maneuvers={wind=1,light=1,fire=1},
 	-- text size
@@ -82,8 +84,15 @@ function do_stuff()
 		local buffs = get.buffs(player.buffs)
 		-- get recasts
 		local ability_recasts = windower.ffxi.get_ability_recasts()
-		if autocooldown and buffs.overload and ability_recasts[114] <= 0 then -- Cooldown
-				cast.JA('input /ja "Cooldown" <me>')
+		-- are we overloaded?
+		if buffs.overload then
+			-- if autocooldown is true and cooldown is off recast then use it
+			if autocooldown and ability_recasts[114] <= 0 then -- Cooldown
+					cast.JA('input /ja "Cooldown" <me>')
+			-- if autooff is true then switch off actions
+			elseif autooff then
+				settings.actions = false
+			end
 		end
 		-- do nothing if we can't do anything
 		if casting or paused or buffs.amnesia or buffs.stun or buffs.sleep or buffs.charm or buffs.terror or buffs.petrification or buffs.overload then return end
