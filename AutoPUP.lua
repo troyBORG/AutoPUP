@@ -43,7 +43,7 @@ local display_box = function()
 	else
 			str = _addon.name..': Actions [Off]'
 	end
-	if resting then
+	if paused then
 			str = _addon.name..': Actions [Paused]'
 	end
 	-- do nothing if show active maneuvers is Off
@@ -86,7 +86,7 @@ function do_stuff()
 				cast.JA('input /ja "Cooldown" <me>')
 		end
 		-- do nothing if we can't do anything
-		if casting or resting or buffs.amnesia or buffs.stun or buffs.sleep or buffs.charm or buffs.terror or buffs.petrification or buffs.overload then return end
+		if casting or paused or buffs.amnesia or buffs.stun or buffs.sleep or buffs.charm or buffs.terror or buffs.petrification or buffs.overload then return end
 		-- cast from pup_cast.lua
 		local maneuver = cast.check_maneuver(settings.maneuvers,'AoE',buffs,ability_recasts)
 		if maneuver then cast.maneuver(maneuver,'<me>',buffs,ability_recasts) return end
@@ -207,19 +207,21 @@ end)
 function event_change()
 	settings.actions = false
 	casting = false
-	resting = false
-	pup_status:text(display_box())
+	paused = false
 end
 
 function status_change(new,old)
 	casting = false
 	if new == 2 or new == 3 then
 		event_change()
+	elseif new == 33 then
+		paused = true
+		addon_message('Actions Paused')
+	elseif old == 33 then
+		paused = false
+		addon_message('Actions Resumed')
 	end
-	if new == 'Resting' then
-		resting = true
-		addon_message('Paused.')
-	end
+	pup_status:text(display_box())
 end
 
 windower.register_event('status change', status_change)
