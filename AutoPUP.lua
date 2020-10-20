@@ -161,7 +161,7 @@ windower.register_event('addon command', function(...)
 			-- store this int to n
 			local n = tonumber(commandArgs[2])
 			-- check n is between 1 and 3
-			if n and n ~= 0 and n <= 3 then -- surely we just set n so why check?
+			if n > 0 and n <= 3 then -- surely we just set n so why check?
 				-- count how many maneuvers are currently set
 				local total_man = 0
 				for k,v in pairs(settings.maneuvers) do
