@@ -158,29 +158,37 @@ windower.register_event('addon command', function(...)
 			addon_message('settings Saved.')
 		-- get.maneuvers from pup_get.lua - check commandArgs[1] is a valid short maneuver name
 		elseif get.maneuvers[commandArgs[1]] and commandArgs[2] then
-			-- store this int to n
+			-- store this int to n so we can validate
 			local n = tonumber(commandArgs[2])
 			-- check n is between 1 and 3
 			if n > 0 and n <= 3 then -- surely we just set n so why check?
 				-- count how many maneuvers are currently set
 				local total_man = 0
 				for k,v in pairs(settings.maneuvers) do
-					total_man = total_man + v
+					-- if manuevers already set for this element, ignore that count and use the new count
+					if k == commandArgs[1] then
+						total_man = total_man + n
+						-- since n is accounted for in total_man
+						n = 0
+					else
+						total_man = total_man + v
+					end
 				end
 				-- store or error if too many
 				if total_man + n > 3 then
 					addon_message('Total maneuvers count (%d) exceeds 3':format(total_man + n))
 				else
-					settings.maneuvers[commandArgs[1]] = n
-					addon_message('%s x%d':format(commandArgs[1],n))
+					settings.maneuvers[commandArgs[1]] = tonumber(commandArgs[2])
+					addon_message('%s x%d':format(commandArgs[1],commandArgs[2]))
 				end
 			-- remove all commandArgs[1] maneuvers
 			elseif commandArgs[2] == '0' or commandArgs[2] == 'off' then
 				settings.maneuvers[commandArgs[1]] = nil
 				addon_message('%s Off':format(commandArgs[1]))
 			-- throw an error
-			elseif n then  -- we set n so why check?
-				addon_message('Error: %d exceeds the maximum value for %s.':format(n,commandArgs[1]))
+			-- elseif n then  -- we set n so why check?
+			else
+				addon_message('Error: %d exceeds the min/max value for %s.':format(commandArgs[2],commandArgs[1]))
 			end
 		-- commandArgs[1] doesn't match a short maneuver name so check it's a string
 		elseif type(settings[commandArgs[1]]) == 'string' and commandArgs[2] then
