@@ -10,8 +10,8 @@ function cast.MA(str,ta)
 	del = settings.delay
 end
 
-function cast.maneuver(str,ta,buffs,recasts)
-	cast.MA(str,ta)
+function cast.maneuver(str,target)
+	cast.MA(str,target)
 end
 
 function cast.check_maneuver_count(man, buffs)
@@ -27,7 +27,7 @@ function cast.check_maneuver_count(man, buffs)
 	return 0
 end
 
-function cast.check_maneuver(maneuvers,targ,buffs,ability_recasts)
+function cast.check_maneuver(maneuvers,buffs,ability_recasts)
 	local maneuver_list = get.maneuver_list(maneuvers)
 	for buff,num in pairs(maneuver_list) do
 		local count = cast.check_maneuver_count(buff, buffs)

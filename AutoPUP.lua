@@ -102,8 +102,8 @@ function do_stuff()
 		-- do nothing if we can't do anything
 		if casting or paused or buffs.amnesia or buffs.stun or buffs.sleep or buffs.charm or buffs.terror or buffs.petrification or buffs.overload then return end
 		-- cast from pup_cast.lua
-		local maneuver = cast.check_maneuver(settings.maneuvers,'AoE',buffs,ability_recasts)
-		if maneuver then cast.maneuver(maneuver,'<me>',buffs,ability_recasts) return end
+		local maneuver = cast.check_maneuver(settings.maneuvers,buffs)
+		if maneuver then cast.maneuver(maneuver,'<me>') return end
 	end
 end
 
