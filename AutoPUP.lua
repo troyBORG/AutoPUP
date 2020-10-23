@@ -92,6 +92,7 @@ function do_stuff()
 			-- if autocooldown is true and cooldown is off recast then use it
 			if autocooldown and windower.ffxi.get_ability_recasts()[114] <= 0 then -- Cooldown
 				cast.JA("Cooldown")
+				-- set a longer delay than usual? Give time for JA to fire?
 				del = 1.2
 			-- if autooff is true then switch off actions
 			elseif autooff then
@@ -105,6 +106,7 @@ function do_stuff()
 		-- there could be no inactive maneuvers so check not false
 		if maneuver then
 			cast.JA(maneuver)
+			-- set standard delay
 			del = settings.delay
 			return
 		end
