@@ -100,7 +100,7 @@ function do_stuff()
 		end
 		-- do nothing if we can't do anything
 		if casting or paused or buffs.amnesia or buffs.stun or buffs.sleep or buffs.charm or buffs.terror or buffs.petrification or buffs.overload then return end
-		-- cast from pup_cast.lua
+		-- check for if there are any inactive maneuvers that should be active
 		local maneuver = cast.check_maneuver(settings.maneuvers,buffs)
 		-- there could be no inactive maneuvers so check not false
 		if maneuver then
@@ -150,17 +150,21 @@ windower.register_event('addon command', function(...)
 	for x=1,#commandArgs do commandArgs[x] = windower.convert_auto_trans(commandArgs[x]):lower() end
 	-- handle toggle with addon name and on/off
 	if not commandArgs[1] or S{'on','off'}:contains(commandArgs[1]) then
+		-- no args at all - toggle actions
 		if not commandArgs[1] then
 			settings.actions = not settings.actions
+		-- if "on"
 		elseif commandArgs[1] == 'on' then
 			settings.actions = true
+		-- if "off"
 		elseif commandArgs[1] == 'off' then
 			settings.actions = false
 		end
 		addon_message('Actions %s':format(settings.actions and 'On' or 'Off'))
 	else
-		-- dunno how this works
+		-- save settings
 		if commandArgs[1] == 'save' then
+			-- this must be a built-in
 			settings:save()
 			addon_message('settings Saved.')
 		-- get.maneuvers from pup_get.lua - check commandArgs[1] is a valid short maneuver name
@@ -197,10 +201,10 @@ windower.register_event('addon command', function(...)
 			else
 				addon_message('Error: %d exceeds the min/max value for %s.':format(commandArgs[2],commandArgs[1]))
 			end
-		-- commandArgs[1] doesn't match a short maneuver name so check it's a string
+		-- this supposed to handle bad maneuver names?
 		elseif type(settings[commandArgs[1]]) == 'string' and commandArgs[2] then
 			local maneuver = get.maneuver(table.concat(commandArgs, ' ',2))
-			-- check string matches a long maneuver name
+			-- check string matches a long maneuver name?
 			if maneuver then
 				-- store if it does
 				settings[commandArgs[1]] = maneuver.enl
@@ -209,10 +213,11 @@ windower.register_event('addon command', function(...)
 				-- otherwise error
 				addon_message('Invalid maneuver name.')
 			end
-		-- wtf does this do?!
+		-- update settings with number values e.g. delay
 		elseif type(settings[commandArgs[1]]) == 'number' and commandArgs[2] and tonumber(commandArgs[2]) then
 			settings[commandArgs[1]] = tonumber(commandArgs[2])
 			addon_message('%s is now set to %d':format(commandArgs[1],settings[commandArgs[1]]))
+		-- toggle settings with boolean values e.g. autooff
 		elseif type(settings[commandArgs[1]]) == 'boolean' then
 			if (not commandArgs[2] and settings[commandArgs[1]] == true) or (commandArgs[2] and commandArgs[2] == 'off') then
 				settings[commandArgs[1]] = false
