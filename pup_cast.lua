@@ -1,17 +1,8 @@
 local cast = {}
 
-function cast.JA(str)
-	windower.send_command(str)
-	del = 1.2
-end
-
-function cast.MA(str,ta)
-	windower.send_command('input /ja "%s" <me>':format(str))
-	del = settings.delay
-end
-
-function cast.maneuver(str,target)
-	cast.MA(str,target)
+-- Takes a JA name as a string and sends the command
+function cast.JA(ja_name_string_en)
+	windower.send_command('input /ja "%s" <me>':format(ja_name_string_en))
 end
 
 -- This function loops through the current buffs looking for "short_name maneuver"

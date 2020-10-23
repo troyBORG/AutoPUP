@@ -91,7 +91,8 @@ function do_stuff()
 		if buffs.overload then
 			-- if autocooldown is true and cooldown is off recast then use it
 			if autocooldown and windower.ffxi.get_ability_recasts()[114] <= 0 then -- Cooldown
-					cast.JA('input /ja "Cooldown" <me>')
+				cast.JA("Cooldown")
+				del = 1.2
 			-- if autooff is true then switch off actions
 			elseif autooff then
 				settings.actions = false
@@ -102,7 +103,11 @@ function do_stuff()
 		-- cast from pup_cast.lua
 		local maneuver = cast.check_maneuver(settings.maneuvers,buffs)
 		-- there could be no inactive maneuvers so check not false
-		if maneuver then cast.maneuver(maneuver,'<me>') return end
+		if maneuver then
+			cast.JA(maneuver)
+			del = settings.delay
+			return
+		end
 	end
 end
 
