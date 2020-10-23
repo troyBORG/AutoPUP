@@ -101,6 +101,7 @@ function do_stuff()
 		if casting or paused or buffs.amnesia or buffs.stun or buffs.sleep or buffs.charm or buffs.terror or buffs.petrification or buffs.overload then return end
 		-- cast from pup_cast.lua
 		local maneuver = cast.check_maneuver(settings.maneuvers,buffs)
+		-- there could be no inactive maneuvers so check not false
 		if maneuver then cast.maneuver(maneuver,'<me>') return end
 	end
 end

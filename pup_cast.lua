@@ -14,6 +14,8 @@ function cast.maneuver(str,target)
 	cast.MA(str,target)
 end
 
+-- This function loops through the current buffs looking for "short_name maneuver"
+-- if found, it returns the count of how many are active
 function cast.check_maneuver_count(man, buffs)
 	-- cycle through all current buffs
 	for k,v in pairs(buffs) do
@@ -27,6 +29,8 @@ function cast.check_maneuver_count(man, buffs)
 	return 0
 end
 
+-- this function finds the first maneuver in settings.maneuvers that is not active
+-- and returns the long_name.
 function cast.check_maneuver(maneuvers,buffs)
 	-- convert current settings.maneuvers to a list
 	local maneuver_list = get.maneuver_list(maneuvers)
