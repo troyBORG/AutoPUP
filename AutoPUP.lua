@@ -221,7 +221,7 @@ windower.register_event('addon command', function(...)
 		elseif type(settings[commandArgs[1]]) == 'boolean' then
 			if (not commandArgs[2] and settings[commandArgs[1]] == true) or (commandArgs[2] and commandArgs[2] == 'off') then
 				settings[commandArgs[1]] = false
-			elseif (not commandArgs[2]) or (commandArgs[2] and commandArgs[2] == 'on') then
+			elseif (not commandArgs[2] and settings[commandArgs[1]] == false) or (commandArgs[2] and commandArgs[2] == 'on') then
 				settings[commandArgs[1]] = true
 			end
 			addon_message('%s %s':format(commandArgs[1],settings[commandArgs[1]] and 'On' or 'Off'))
