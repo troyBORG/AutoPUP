@@ -137,9 +137,6 @@ windower.register_event('incoming chunk', function(id,original,modified,injected
 		elseif L{7,9}:contains(packet['Category']) then
 			casting = true
 		end
-	elseif id == 0x029 then
-		local packet = packets.parse('incoming', original)
-		--table.vprint(packet)
 	end
 end)
 
