@@ -15,11 +15,15 @@ function cast.maneuver(str,ta,buffs,recasts)
 end
 
 function cast.check_maneuver_count(man, buffs)
+	-- cycle through all current buffs
 	for k,v in pairs(buffs) do
+		-- match maneuver short name e.g. thunder
 		if (k == "%s maneuver":format(man)) then
+			-- return number of active maneuver buffs
 			return v
 		end
 	end
+	-- return 0 if no maneuver buffs
 	return 0
 end
 

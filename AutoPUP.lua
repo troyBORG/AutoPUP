@@ -17,6 +17,7 @@ cast = require('pup_cast')
 default = {
 	-- set the delay
 	delay=1,
+	-- show active manuevers in display_box
 	active=true,
 	-- toggle automatic cooldown on overload
 	autocooldown=false,
@@ -48,12 +49,13 @@ local display_box = function()
 	if paused then
 			str = _addon.name..': Actions [Paused]'
 	end
-	-- do nothing if show active maneuvers is Off
+	-- return the string now if show active maneuvers is Off
 	if not settings.active then return str end
 	-- show active maneuvers
 	for k,v in pairs(settings.maneuvers) do
 			str = str..'\n %s:[x%d]':format(k:ucfirst(),v)
 	end
+	-- return the string
 	return str
 end
 
@@ -65,10 +67,13 @@ function do_stuff()
 	if not settings.actions then return end
 	-- update the interval since do_stuff last run
 	counter = counter + interval
-	-- if the interval since last do_stuff is more than some delay (del) then try and run again
+	-- if the interval since last do_stuff is more than some delay (del - 0 by default) then try and run again
 	if counter > del then
+		-- enough time has elapsed so reset the counter
 		counter = 0
+		-- del is now interval so need at least two loops to trigger do_stuff
 		del = interval
+		-- get player
 		local player = windower.ffxi.get_player()
 		-- if can't get player, we're not PUP or status is not equal to 1 or 0 then end
 		if not player or player.main_job ~= 'PUP' or (player.status ~= 1 and player.status ~= 0) then return end
