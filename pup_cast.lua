@@ -28,13 +28,20 @@ function cast.check_maneuver_count(man, buffs)
 end
 
 function cast.check_maneuver(maneuvers,buffs,ability_recasts)
+	-- convert current settings.maneuvers to a list
 	local maneuver_list = get.maneuver_list(maneuvers)
-	for buff,num in pairs(maneuver_list) do
-		local count = cast.check_maneuver_count(buff, buffs)
+	-- for each maneuver
+	for maneuver_short_name,num in pairs(maneuver_list) do
+		-- check how many of maneuver are active
+		local count = cast.check_maneuver_count(maneuver_short_name, buffs)
+		-- check how mant there are against how many are required
 		if count < num then
-			local maneuver = get.maneuver(get.maneuvers[buff][1])
-			if maneuver and ability_recasts[210] <= 0 then -- 210 is Maneuvers JA
-				return maneuver.enl
+			-- get the long name for the maneuver in proper case
+			local maneuver_long_name = get.maneuver(get.maneuvers[maneuver_short_name][1])
+			-- why do we check this is set if we just set it?
+			if maneuver_long_name and ability_recasts[210] <= 0 then -- 210 is Maneuvers JA
+				-- why do we append .enl
+				return maneuver_long_name.enl
 			end
 		end
 	end
