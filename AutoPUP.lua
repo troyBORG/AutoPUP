@@ -30,7 +30,7 @@ default = {
 
 settings = config.load(default)
 
--- no idea
+-- set del (some delay) to zero on first run
 del = 0
 -- a counter?
 counter = 0
