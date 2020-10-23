@@ -87,12 +87,10 @@ function do_stuff()
 		end
 		-- get buffs
 		local buffs = get.buffs(player.buffs)
-		-- get recasts
-		local ability_recasts = windower.ffxi.get_ability_recasts()
 		-- are we overloaded?
 		if buffs.overload then
 			-- if autocooldown is true and cooldown is off recast then use it
-			if autocooldown and ability_recasts[114] <= 0 then -- Cooldown
+			if autocooldown and windower.ffxi.get_ability_recasts()[114] <= 0 then -- Cooldown
 					cast.JA('input /ja "Cooldown" <me>')
 			-- if autooff is true then switch off actions
 			elseif autooff then

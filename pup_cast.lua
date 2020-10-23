@@ -27,7 +27,7 @@ function cast.check_maneuver_count(man, buffs)
 	return 0
 end
 
-function cast.check_maneuver(maneuvers,buffs,ability_recasts)
+function cast.check_maneuver(maneuvers,buffs)
 	-- convert current settings.maneuvers to a list
 	local maneuver_list = get.maneuver_list(maneuvers)
 	-- for each maneuver
@@ -39,7 +39,7 @@ function cast.check_maneuver(maneuvers,buffs,ability_recasts)
 			-- get the long name for the maneuver in proper case
 			local maneuver_long_name = get.maneuver(get.maneuvers[maneuver_short_name][1])
 			-- why do we check this is set if we just set it?
-			if maneuver_long_name and ability_recasts[210] <= 0 then -- 210 is Maneuvers JA
+			if maneuver_long_name and windower.ffxi.get_ability_recasts()[210] <= 0 then -- 210 is Maneuvers JA
 				-- why do we append .enl
 				return maneuver_long_name.enl
 			end
