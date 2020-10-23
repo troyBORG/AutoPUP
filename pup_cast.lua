@@ -27,7 +27,7 @@ function cast.check_maneuver(maneuver_list,buffs)
 	for maneuver_short_name,num in pairs(maneuver_list) do
 		-- check how many of maneuver are active
 		local count = cast.check_maneuver_count(maneuver_short_name, buffs)
-		-- check how mant there are against how many are required
+		-- check how many there are against how many are required
 		if count < num then
 			-- get the maneuver id and enl
 			local maneuver_long_name = get.maneuver(get.maneuvers[maneuver_short_name][1])
