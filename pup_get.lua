@@ -19,6 +19,7 @@ function get.maneuver_list(maneuvers)
 	return list
 end
 
+-- Takes maneuver short name and returns the long name for the maneuver (in proper case) as .enl and JA id to .id
 function get.maneuver(name)
 	name = string.lower(name)
 	-- ids from pup_ids.lua
