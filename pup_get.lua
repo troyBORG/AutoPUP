@@ -31,14 +31,14 @@ function get.maneuver(name)
 	return nil
 end
 
-function get.buffs(curbuffs)
-	local buffs = {}
-	for i,v in pairs(curbuffs) do
-		if res.buffs[v] and res.buffs[v].english then
-			buffs[res.buffs[v].english:lower()] = (buffs[res.buffs[v].english:lower()] or 0) + 1
-		end
-	end
-	return buffs
+-- Store buffs by name?
+function get.buffs()
+  local set_buff = {}
+  for _, buff_id in ipairs(windower.ffxi.get_player().buffs) do
+    local buff_en = res.buffs[buff_id].en:lower()
+    set_buff[buff_en] = (set_buff[buff_en] or 0) + 1
+  end
+  return set_buff
 end
 
 return get

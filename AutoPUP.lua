@@ -86,7 +86,7 @@ function do_stuff()
 			end
 		end
 		-- get buffs
-		local buffs = get.buffs(player.buffs)
+		local buffs = get.buffs()
 		-- are we overloaded?
 		if buffs.overload then
 			-- if autocooldown is true and cooldown is off recast then use it
