@@ -23,14 +23,6 @@ get.ids  = L{
 	[307] = 'Dark Maneuver',
 	}
 
-function get.maneuver_list(maneuvers)
-	local list = {}
-	for k,v in pairs(maneuvers) do
-		list[k] = v
-	end
-	return list
-end
-
 -- Takes maneuver short name and returns the long name for the maneuver (in proper case) as .enl and JA id to .id
 function get.maneuver(name)
 	name = string.lower(name)

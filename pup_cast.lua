@@ -22,9 +22,7 @@ end
 
 -- Finds the first maneuver in settings.maneuvers that is not active
 -- and returns the long_name.
-function cast.check_maneuver(maneuvers,buffs)
-	-- convert current settings.maneuvers to a list
-	local maneuver_list = get.maneuver_list(maneuvers)
+function cast.check_maneuver(maneuver_list,buffs)
 	-- for each maneuver
 	for maneuver_short_name,num in pairs(maneuver_list) do
 		-- check how many of maneuver are active
