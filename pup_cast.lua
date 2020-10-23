@@ -29,11 +29,11 @@ function cast.check_maneuver(maneuver_list,buffs)
 		local count = cast.check_maneuver_count(maneuver_short_name, buffs)
 		-- check how many there are against how many are required
 		if count < num then
-			-- get the maneuver id and enl
-			local maneuver_long_name = get.maneuver(get.maneuvers[maneuver_short_name][1])
+			-- get the long name
+			local maneuver_long_name = get.maneuvers[maneuver_short_name][1]
 			-- why do we check this is set if we just set it?
 			if maneuver_long_name and windower.ffxi.get_ability_recasts()[210] <= 0 then -- 210 is Maneuvers JA
-				return maneuver_long_name.enl
+				return maneuver_long_name
 			end
 		end
 	end
