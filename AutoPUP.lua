@@ -10,7 +10,6 @@ packets = require('packets')
 texts = require('texts')
 config = require('config')
 
-ids = require('pup_ids')
 get = require('pup_get')
 cast = require('pup_cast')
 
