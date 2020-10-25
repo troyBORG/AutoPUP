@@ -91,12 +91,12 @@ function do_stuff()
 		-- are we overloaded?
 		if buffs.overload then
 			-- if AutoCooldown is true and cooldown is off recast then use it
-			if AutoCooldown and windower.ffxi.get_ability_recasts()[114] <= 0 then -- Cooldown
+			if settings.AutoCooldown and windower.ffxi.get_ability_recasts()[114] <= 0 then -- Cooldown
 				cast.JA("Cooldown")
 				-- set a longer delay than usual? Give time for JA to fire?
 				del = 1.2
 			-- if AutoOff is true then switch off actions
-			elseif AutoOff then
+			elseif settings.AutoOff then
 				settings.actions = false
 			end
 		end
