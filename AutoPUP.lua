@@ -19,9 +19,11 @@ default = {
 	-- show active manuevers in display_box
 	active=true,
 	-- toggle automatic cooldown on overload
-	autocooldown=false,
+	AutoCooldown=false,
 	-- toggle actions off on overload
-	autooff=true,
+	AutoOff=true,
+	-- auto-stop on exit from "content"
+	AutoStop=true,
 	-- default maneuvers
 	maneuvers={wind=1,light=1,fire=1},
 	-- text size
@@ -88,13 +90,13 @@ function do_stuff()
 		local buffs = get.buffs()
 		-- are we overloaded?
 		if buffs.overload then
-			-- if autocooldown is true and cooldown is off recast then use it
-			if autocooldown and windower.ffxi.get_ability_recasts()[114] <= 0 then -- Cooldown
+			-- if AutoCooldown is true and cooldown is off recast then use it
+			if AutoCooldown and windower.ffxi.get_ability_recasts()[114] <= 0 then -- Cooldown
 				cast.JA("Cooldown")
 				-- set a longer delay than usual? Give time for JA to fire?
 				del = 1.2
-			-- if autooff is true then switch off actions
-			elseif autooff then
+			-- if AutoOff is true then switch off actions
+			elseif AutoOff then
 				settings.actions = false
 			end
 		end
@@ -217,7 +219,7 @@ windower.register_event('addon command', function(...)
 		elseif type(settings[commandArgs[1]]) == 'number' and commandArgs[2] and tonumber(commandArgs[2]) then
 			settings[commandArgs[1]] = tonumber(commandArgs[2])
 			addon_message('%s is now set to %d':format(commandArgs[1],settings[commandArgs[1]]))
-		-- toggle settings with boolean values e.g. autooff
+		-- toggle settings with boolean values e.g. AutoOff
 		elseif type(settings[commandArgs[1]]) == 'boolean' then
 			if (not commandArgs[2] and settings[commandArgs[1]] == true) or (commandArgs[2] and commandArgs[2] == 'off') then
 				settings[commandArgs[1]] = false
