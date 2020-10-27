@@ -206,18 +206,6 @@ windower.register_event('addon command', function(...)
 			else
 				addon_message('Error: %d exceeds the min/max value for %s.':format(commandArgs[2],commandArgs[1]))
 			end
-		-- this supposed to handle bad maneuver names?
-		elseif type(settings[commandArgs[1]]) == 'string' and commandArgs[2] then
-			local maneuver = get.maneuver(table.concat(commandArgs, ' ',2))
-			-- check string matches a long maneuver name?
-			if maneuver then
-				-- store if it does
-				settings[commandArgs[1]] = maneuver.enl
-				addon_message('%s is now set to %s':format(commandArgs[1],maneuver.enl))
-			else
-				-- otherwise error
-				addon_message('Invalid maneuver name.')
-			end
 		-- update settings with number values e.g. delay
 		elseif type(settings[commandArgs[1]]) == 'number' and commandArgs[2] and tonumber(commandArgs[2]) then
 			settings[commandArgs[1]] = tonumber(commandArgs[2])
