@@ -172,6 +172,14 @@ windower.register_event('addon command', function(...)
 		Log('Actions %s':format(settings.actions and 'On' or 'Off'))
 	elseif commandArgs[1] == 'list' then
 		list_maneuver_sets()
+	elseif commandArgs[1] == 'help' then
+		log('Auto maneuvers command list:')
+		log('  1. help - Brings up this menu.')
+		log('  2. on/off - enables/disables auto maneuvers.')
+		log('  3. list - list all maneuver sets.')
+		log('  4. set <setname> - set pre-defined list of maneuvers.')
+		log('  5. saveset <setname> - save current manuever config as a pre-defined set.')
+		log('  6. save - save ALL settings for current user.')
 	else
 		-- save settings
 		if commandArgs[1] == 'save' then
