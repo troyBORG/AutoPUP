@@ -207,7 +207,7 @@ windower.register_event('addon command', function(...)
 				end
 				-- store or error if too many
 				if total_man + n > 3 then
-					Log('Total maneuvers count (%d) exceeds 3':format(total_man + n))
+					error('Total maneuvers count (%d) exceeds 3':format(total_man + n))
 				else
 					maneuvers[commandArgs[1]] = tonumber(commandArgs[2])
 					log('%s x%d':format(commandArgs[1],commandArgs[2]))
@@ -219,7 +219,7 @@ windower.register_event('addon command', function(...)
 			-- throw an error
 			-- elseif n then  -- we set n so why check?
 			else
-				Log('Error: %d exceeds the min/max value for %s.':format(commandArgs[2],commandArgs[1]))
+				error('Error: %d exceeds the min/max value for %s.':format(commandArgs[2],commandArgs[1]))
 			end
 		-- update settings with number values e.g. delay
 		elseif type(settings[commandArgs[1]]) == 'number' and commandArgs[2] and tonumber(commandArgs[2]) then
@@ -255,7 +255,7 @@ function status_change(new,old)
 		return
 	elseif new == 33 then
 		paused = true
-		Log('Actions Paused')
+		warning('Actions Paused')
 	elseif old == 33 then
 		paused = false
 		log('Actions Resumed')
