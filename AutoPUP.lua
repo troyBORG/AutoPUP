@@ -169,7 +169,7 @@ windower.register_event('addon command', function(...)
 		elseif commandArgs[1] == 'off' then
 			settings.actions = false
 		end
-		Log('Actions %s':format(settings.actions and 'On' or 'Off'))
+		log('Actions %s':format(settings.actions and 'On' or 'Off'))
 	elseif commandArgs[1] == 'list' then
 		list_maneuver_sets()
 	elseif commandArgs[1] == 'help' then
@@ -185,7 +185,7 @@ windower.register_event('addon command', function(...)
 		if commandArgs[1] == 'save' then
 			-- this must be a built-in
 			settings:save()
-			Log('settings Saved.')
+			log('settings Saved.')
 		-- update active maneuvers
 		-- get.maneuvers from pup_get.lua - check commandArgs[1] is a valid short maneuver name
 		elseif get.maneuvers[commandArgs[1]] and commandArgs[2] then
@@ -210,12 +210,12 @@ windower.register_event('addon command', function(...)
 					Log('Total maneuvers count (%d) exceeds 3':format(total_man + n))
 				else
 					maneuvers[commandArgs[1]] = tonumber(commandArgs[2])
-					Log('%s x%d':format(commandArgs[1],commandArgs[2]))
+					log('%s x%d':format(commandArgs[1],commandArgs[2]))
 				end
 			-- remove all commandArgs[1] maneuvers
 			elseif commandArgs[2] == '0' or commandArgs[2] == 'off' then
 				maneuvers[commandArgs[1]] = nil
-				Log('%s Off':format(commandArgs[1]))
+				log('%s Off':format(commandArgs[1]))
 			-- throw an error
 			-- elseif n then  -- we set n so why check?
 			else
@@ -224,7 +224,7 @@ windower.register_event('addon command', function(...)
 		-- update settings with number values e.g. delay
 		elseif type(settings[commandArgs[1]]) == 'number' and commandArgs[2] and tonumber(commandArgs[2]) then
 			settings[commandArgs[1]] = tonumber(commandArgs[2])
-			Log('%s is now set to %d':format(commandArgs[1],settings[commandArgs[1]]))
+			log('%s is now set to %d':format(commandArgs[1],settings[commandArgs[1]]))
 		-- toggle settings with boolean values e.g. AutoOff
 		elseif type(settings[commandArgs[1]]) == 'boolean' then
 			if (not commandArgs[2] and settings[commandArgs[1]] == true) or (commandArgs[2] and commandArgs[2] == 'off') then
@@ -232,7 +232,7 @@ windower.register_event('addon command', function(...)
 			elseif (not commandArgs[2] and settings[commandArgs[1]] == false) or (commandArgs[2] and commandArgs[2] == 'on') then
 				settings[commandArgs[1]] = true
 			end
-			Log('%s %s':format(commandArgs[1],settings[commandArgs[1]] and 'On' or 'Off'))
+			log('%s %s':format(commandArgs[1],settings[commandArgs[1]] and 'On' or 'Off'))
 		-- some debug option!
 		elseif commandArgs[1] == 'eval' then
 			assert(loadstring(table.concat(commandArgs, ' ',2)))()
@@ -258,7 +258,7 @@ function status_change(new,old)
 		Log('Actions Paused')
 	elseif old == 33 then
 		paused = false
-		Log('Actions Resumed')
+		log('Actions Resumed')
 	end
 	pup_status:text(display_box())
 end
