@@ -25,7 +25,7 @@ default = {
 	-- auto-stop on exit from "content"
 	AutoStop=true,
 	-- default maneuvers
-	maneuvers={wind=1,light=1,fire=1},
+	maneuver_sets={default={wind=1,light=1,fire=1}},
 	-- text size
 	box={text={size=10}}
 	}
@@ -38,6 +38,8 @@ del = 0
 counter = 0
 -- how often to run do_stuff()
 interval = 0.2
+-- set the active maneuvers to the default
+maneuvers = settings.maneuver_sets.default
 
 local display_box = function()
 	local str
@@ -53,7 +55,7 @@ local display_box = function()
 	-- return the string now if show active maneuvers is Off
 	if not settings.active then return str end
 	-- show active maneuvers
-	for k,v in pairs(settings.maneuvers) do
+	for k,v in pairs(maneuvers) do
 			str = str..'\n %s:[x%d]':format(k:ucfirst(),v)
 	end
 	-- return the string
@@ -103,7 +105,7 @@ function do_stuff()
 		-- do nothing if we can't do anything
 		if casting or paused or buffs.amnesia or buffs.stun or buffs.sleep or buffs.charm or buffs.terror or buffs.petrification or buffs.overload then return end
 		-- check for if there are any inactive maneuvers that should be active
-		local maneuver = cast.check_maneuver(settings.maneuvers,buffs)
+		local maneuver = cast.check_maneuver(maneuvers,buffs)
 		-- there could be no inactive maneuvers so check not false
 		if maneuver then
 			cast.JA(maneuver)
@@ -169,6 +171,7 @@ windower.register_event('addon command', function(...)
 			-- this must be a built-in
 			settings:save()
 			addon_message('settings Saved.')
+		-- updat eactive maneuvers
 		-- get.maneuvers from pup_get.lua - check commandArgs[1] is a valid short maneuver name
 		elseif get.maneuvers[commandArgs[1]] and commandArgs[2] then
 			-- store this int to n so we can validate
@@ -177,7 +180,7 @@ windower.register_event('addon command', function(...)
 			if n > 0 and n <= 3 then -- surely we just set n so why check?
 				-- count how many maneuvers are currently set
 				local total_man = 0
-				for k,v in pairs(settings.maneuvers) do
+				for k,v in pairs(maneuvers) do
 					-- if manuevers already set for this element, ignore that count and use the new count
 					if k == commandArgs[1] then
 						total_man = total_man + n
@@ -191,12 +194,12 @@ windower.register_event('addon command', function(...)
 				if total_man + n > 3 then
 					addon_message('Total maneuvers count (%d) exceeds 3':format(total_man + n))
 				else
-					settings.maneuvers[commandArgs[1]] = tonumber(commandArgs[2])
+					maneuvers[commandArgs[1]] = tonumber(commandArgs[2])
 					addon_message('%s x%d':format(commandArgs[1],commandArgs[2]))
 				end
 			-- remove all commandArgs[1] maneuvers
 			elseif commandArgs[2] == '0' or commandArgs[2] == 'off' then
-				settings.maneuvers[commandArgs[1]] = nil
+				maneuvers[commandArgs[1]] = nil
 				addon_message('%s Off':format(commandArgs[1]))
 			-- throw an error
 			-- elseif n then  -- we set n so why check?
