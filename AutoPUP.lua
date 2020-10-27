@@ -178,7 +178,7 @@ windower.register_event('addon command', function(...)
 			-- this must be a built-in
 			settings:save()
 			Log('settings Saved.')
-		-- updat eactive maneuvers
+		-- update active maneuvers
 		-- get.maneuvers from pup_get.lua - check commandArgs[1] is a valid short maneuver name
 		elseif get.maneuvers[commandArgs[1]] and commandArgs[2] then
 			-- store this int to n so we can validate
