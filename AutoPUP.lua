@@ -233,6 +233,7 @@ function status_change(new,old)
 	casting = false
 	if new == 2 or new == 3 then
 		event_change()
+		return
 	elseif new == 33 then
 		paused = true
 		Log('Actions Paused')
