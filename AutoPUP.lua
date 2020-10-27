@@ -5,7 +5,7 @@ _addon.version = '1.0.0.0'
 
 require('luau')
 require('pack')
-require 'logger'
+require('logger')
 packets = require('packets')
 texts = require('texts')
 config = require('config')
@@ -144,10 +144,6 @@ windower.register_event('incoming chunk', function(id,original,modified,injected
 	end
 end)
 
-function addon_message(str)
-	windower.add_to_chat(207, _addon.name..': '..str)
-end
-
 windower.register_event('addon command', function(...)
 	local commandArgs = {...}
 	-- convert any autotrans in Args and overwrite Arg
@@ -164,13 +160,13 @@ windower.register_event('addon command', function(...)
 		elseif commandArgs[1] == 'off' then
 			settings.actions = false
 		end
-		addon_message('Actions %s':format(settings.actions and 'On' or 'Off'))
+		Log('Actions %s':format(settings.actions and 'On' or 'Off'))
 	else
 		-- save settings
 		if commandArgs[1] == 'save' then
 			-- this must be a built-in
 			settings:save()
-			addon_message('settings Saved.')
+			Log('settings Saved.')
 		-- updat eactive maneuvers
 		-- get.maneuvers from pup_get.lua - check commandArgs[1] is a valid short maneuver name
 		elseif get.maneuvers[commandArgs[1]] and commandArgs[2] then
@@ -192,24 +188,24 @@ windower.register_event('addon command', function(...)
 				end
 				-- store or error if too many
 				if total_man + n > 3 then
-					addon_message('Total maneuvers count (%d) exceeds 3':format(total_man + n))
+					Log('Total maneuvers count (%d) exceeds 3':format(total_man + n))
 				else
 					maneuvers[commandArgs[1]] = tonumber(commandArgs[2])
-					addon_message('%s x%d':format(commandArgs[1],commandArgs[2]))
+					Log('%s x%d':format(commandArgs[1],commandArgs[2]))
 				end
 			-- remove all commandArgs[1] maneuvers
 			elseif commandArgs[2] == '0' or commandArgs[2] == 'off' then
 				maneuvers[commandArgs[1]] = nil
-				addon_message('%s Off':format(commandArgs[1]))
+				Log('%s Off':format(commandArgs[1]))
 			-- throw an error
 			-- elseif n then  -- we set n so why check?
 			else
-				addon_message('Error: %d exceeds the min/max value for %s.':format(commandArgs[2],commandArgs[1]))
+				Log('Error: %d exceeds the min/max value for %s.':format(commandArgs[2],commandArgs[1]))
 			end
 		-- update settings with number values e.g. delay
 		elseif type(settings[commandArgs[1]]) == 'number' and commandArgs[2] and tonumber(commandArgs[2]) then
 			settings[commandArgs[1]] = tonumber(commandArgs[2])
-			addon_message('%s is now set to %d':format(commandArgs[1],settings[commandArgs[1]]))
+			Log('%s is now set to %d':format(commandArgs[1],settings[commandArgs[1]]))
 		-- toggle settings with boolean values e.g. AutoOff
 		elseif type(settings[commandArgs[1]]) == 'boolean' then
 			if (not commandArgs[2] and settings[commandArgs[1]] == true) or (commandArgs[2] and commandArgs[2] == 'off') then
@@ -217,7 +213,7 @@ windower.register_event('addon command', function(...)
 			elseif (not commandArgs[2] and settings[commandArgs[1]] == false) or (commandArgs[2] and commandArgs[2] == 'on') then
 				settings[commandArgs[1]] = true
 			end
-			addon_message('%s %s':format(commandArgs[1],settings[commandArgs[1]] and 'On' or 'Off'))
+			Log('%s %s':format(commandArgs[1],settings[commandArgs[1]] and 'On' or 'Off'))
 		-- some debug option!
 		elseif commandArgs[1] == 'eval' then
 			assert(loadstring(table.concat(commandArgs, ' ',2)))()
@@ -239,10 +235,10 @@ function status_change(new,old)
 		event_change()
 	elseif new == 33 then
 		paused = true
-		addon_message('Actions Paused')
+		Log('Actions Paused')
 	elseif old == 33 then
 		paused = false
-		addon_message('Actions Resumed')
+		Log('Actions Resumed')
 	end
 	pup_status:text(display_box())
 end
