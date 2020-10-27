@@ -144,6 +144,15 @@ windower.register_event('incoming chunk', function(id,original,modified,injected
 	end
 end)
 
+function list_maneuver_sets()
+    log('Listing maneuver sets:')
+    for key,_ in pairs(settings.maneuver_sets) do
+        if key ~= 'default' then
+            log('\t' .. key)
+        end
+    end
+end
+
 windower.register_event('addon command', function(...)
 	local commandArgs = {...}
 	-- convert any autotrans in Args and overwrite Arg
@@ -161,6 +170,8 @@ windower.register_event('addon command', function(...)
 			settings.actions = false
 		end
 		Log('Actions %s':format(settings.actions and 'On' or 'Off'))
+	elseif commandArgs[1] == 'list' then
+		list_maneuver_sets()
 	else
 		-- save settings
 		if commandArgs[1] == 'save' then
