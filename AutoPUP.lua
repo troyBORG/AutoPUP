@@ -252,6 +252,8 @@ windower.register_event('addon command', function(...)
 				settings[commandArgs[1]] = true
 			end
 			log('%s %s':format(commandArgs[1],settings[commandArgs[1]] and 'On' or 'Off'))
+			-- save these settings for the current character
+			settings:save()
 		-- some debug option!
 		elseif commandArgs[1]:lower() == 'eval' then
 			assert(loadstring(table.concat(commandArgs, ' ',2)))()
