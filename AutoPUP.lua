@@ -6,6 +6,8 @@ _addon.version = '1.0.0.0'
 require('luau')
 require('pack')
 require('logger')
+require('tables')
+
 packets = require('packets')
 texts = require('texts')
 config = require('config')
@@ -39,7 +41,7 @@ counter = 0
 -- how often to run do_stuff()
 interval = 0.2
 -- set the active maneuvers to the default
-maneuvers = settings.maneuver_sets.default:copy()
+maneuvers = table.copy(settings.maneuver_sets.default)
 
 local display_box = function()
 	local str
@@ -237,7 +239,7 @@ windower.register_event('addon command', function(...)
 			if not commandArgs[2] then
 				error('set name required!')
 			else
-				maneuvers = settings.maneuver_sets[commandArgs[2]]:copy()
+				maneuvers = table.copy(settings.maneuver_sets[commandArgs[2]])
 				notice('maneuvers set to '..commandArgs[2]..'.')
 			end
 		-- update settings with number values e.g. delay
