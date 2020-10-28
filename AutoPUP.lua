@@ -13,7 +13,7 @@ config = require('config')
 get = require('pup_get')
 cast = require('pup_cast')
 
-default = {
+defaults = {
 	-- set the delay
 	delay=1,
 	-- show active manuevers in display_box
@@ -30,7 +30,7 @@ default = {
 	box={text={size=10}}
 	}
 
-settings = config.load(default)
+settings = config.load(defaults)
 
 -- set del (some delay) to zero on first run
 del = 0
