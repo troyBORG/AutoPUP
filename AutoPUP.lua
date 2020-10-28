@@ -221,6 +221,17 @@ windower.register_event('addon command', function(...)
 			else
 				error('%d exceeds the min/max value for %s.':format(commandArgs[2],commandArgs[1]))
 			end
+		-- handle saving sets
+		elseif commandArgs[1]:lower() == 'saveset' then
+			if not commandArgs[2] then
+				error('set name required!')
+			elseif commandArgs[2]:lower() == 'default' then
+        error('please choose a name other than default.')
+			else
+				settings.maneuver_sets[commandArgs[2]] = maneuvers
+				config.save(settings, 'all')
+				notice('set '..commandArgs[2]..' saved.')
+			end
 		-- update settings with number values e.g. delay
 		elseif type(settings[commandArgs[1]]) == 'number' and commandArgs[2] and tonumber(commandArgs[2]) then
 			settings[commandArgs[1]] = tonumber(commandArgs[2])
