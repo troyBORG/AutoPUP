@@ -213,7 +213,7 @@ windower.register_event('addon command', function(...)
 					log('%s x%d':format(commandArgs[1],commandArgs[2]))
 				end
 			-- remove all commandArgs[1] maneuvers
-			elseif commandArgs[2] == '0' or commandArgs[2] == 'off' then
+			elseif commandArgs[2] == '0' or commandArgs[2]:lower() == 'off' then
 				maneuvers[commandArgs[1]] = nil
 				log('%s Off':format(commandArgs[1]))
 			-- throw an error
@@ -234,7 +234,7 @@ windower.register_event('addon command', function(...)
 			end
 			log('%s %s':format(commandArgs[1],settings[commandArgs[1]] and 'On' or 'Off'))
 		-- some debug option!
-		elseif commandArgs[1] == 'eval' then
+		elseif commandArgs[1]:lower() == 'eval' then
 			assert(loadstring(table.concat(commandArgs, ' ',2)))()
 		end
 	end
