@@ -232,6 +232,14 @@ windower.register_event('addon command', function(...)
 				config.save(settings, 'all')
 				notice('set '..commandArgs[2]..' saved.')
 			end
+		-- handle setting sets (sets, sets, sets!)
+		elseif commandArgs[1]:lower() == 'set' then
+			if not commandArgs[2] then
+				error('set name required!')
+			else
+				maneuvers = settings.maneuver_sets[commandArgs[2]]
+				notice('maneuvers set to '..commandArgs[2]..'.')
+			end
 		-- update settings with number values e.g. delay
 		elseif type(settings[commandArgs[1]]) == 'number' and commandArgs[2] and tonumber(commandArgs[2]) then
 			settings[commandArgs[1]] = tonumber(commandArgs[2])
