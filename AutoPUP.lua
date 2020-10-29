@@ -67,6 +67,18 @@ end
 pup_status = texts.new(display_box(),settings.box,settings)
 pup_status:show()
 
+function overload_handling()
+	-- if AutoCooldown is true and cooldown is off recast then use it
+	if settings.AutoCooldown and windower.ffxi.get_ability_recasts()[114] <= 0 then -- Cooldown
+		cast.JA("Cooldown")
+		-- set a longer delay than usual? Give time for JA to fire?
+		del = 1.2
+	-- if AutoOff is true then switch off actions
+	elseif settings.AutoOff then
+		settings.actions = false
+	end
+end
+
 function do_stuff()
 	-- stop if actions not set
 	if not settings.actions then return end
@@ -94,15 +106,7 @@ function do_stuff()
 		local buffs = get.buffs()
 		-- are we overloaded?
 		if buffs.overload then
-			-- if AutoCooldown is true and cooldown is off recast then use it
-			if settings.AutoCooldown and windower.ffxi.get_ability_recasts()[114] <= 0 then -- Cooldown
-				cast.JA("Cooldown")
-				-- set a longer delay than usual? Give time for JA to fire?
-				del = 1.2
-			-- if AutoOff is true then switch off actions
-			elseif settings.AutoOff then
-				settings.actions = false
-			end
+			overload_handling()
 		end
 		-- do nothing if we can't do anything
 		if casting or paused or buffs.amnesia or buffs.stun or buffs.sleep or buffs.charm or buffs.terror or buffs.petrification or buffs.overload then return end
