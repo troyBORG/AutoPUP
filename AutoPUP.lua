@@ -1,7 +1,7 @@
-_addon.author = 'sruon'
+_addon.author = 'dtw'
 _addon.commands = {'autopup','pup'}
 _addon.name = 'AutoPUP'
-_addon.version = '1.0.0.0'
+_addon.version = '2.0.0.0'
 
 require('luau')
 require('pack')
