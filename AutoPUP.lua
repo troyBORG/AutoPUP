@@ -79,7 +79,7 @@ function overload_handling()
 	end
 end
 
-function do_stuff()
+function maneuver_handling()
 	-- stop if actions not set
 	if not settings.actions then return end
 	-- update the interval since do_stuff last run
@@ -122,7 +122,7 @@ function do_stuff()
 	end
 end
 
-do_stuff:loop(interval)
+maneuver_handling:loop(interval)
 
 windower.register_event('incoming chunk', function(id,original,modified,injected,blocked)
 		-- this checks if we're casting
