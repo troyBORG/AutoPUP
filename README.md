@@ -1,9 +1,11 @@
 # AutoPUP
-### Automates PUP maneuvers.
-Automatically keeps up PUP maneuvers.
 
-##### Commands: 
-when typing commands don't use "[ ]" or "|". 
+Automatically keeps up PUP maneuvers from pre-defined lists.
+
+See the changelog for a complete list of changes.
+
+##### Commands:
+when typing commands don't use "[ ]" or "|".
 
 [on|off] is optional and when not provided will toggle states.
 
@@ -25,4 +27,5 @@ To turn a maneuver off:
 
 
 ## Credits
+* Forked from AutoPup 1.0 by sruon
 * Code largely based on [Ivaar's Singer addon](https://github.com/Ivaar/Windower-addons/tree/master/Singer)
