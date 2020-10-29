@@ -122,6 +122,15 @@ function maneuver_handling()
 	end
 end
 
+function list_maneuver_sets()
+    log('Listing maneuver sets:')
+    for key,_ in pairs(settings.maneuver_sets) do
+        if key ~= 'default' then
+            log('\t' .. key)
+        end
+    end
+end
+
 maneuver_handling:loop(interval)
 
 windower.register_event('incoming chunk', function(id,original,modified,injected,blocked)
@@ -149,15 +158,6 @@ windower.register_event('incoming chunk', function(id,original,modified,injected
 		end
 	end
 end)
-
-function list_maneuver_sets()
-    log('Listing maneuver sets:')
-    for key,_ in pairs(settings.maneuver_sets) do
-        if key ~= 'default' then
-            log('\t' .. key)
-        end
-    end
-end
 
 windower.register_event('addon command', function(...)
 	local commandArgs = {...}
