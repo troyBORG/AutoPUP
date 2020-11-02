@@ -162,7 +162,7 @@ end)
 windower.register_event('addon command', function(...)
 	local commandArgs = {...}
 	-- convert any autotrans in Args and overwrite Arg
-	for x=1,#commandArgs do commandArgs[x] = windower.convert_auto_trans(commandArgs[x]):lower() end
+	for x=1,#commandArgs do commandArgs[x] = windower.convert_auto_trans(commandArgs[x]) end
 	-- handle toggle with addon name and on/off
 	if not commandArgs[1] or S{'on','off'}:contains(commandArgs[1]) then
 		-- no args at all - toggle actions
