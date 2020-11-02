@@ -293,7 +293,7 @@ function status_change(new,old)
 end
 
 windower.register_event('status change', status_change)
-windower.register_event('zone change','job change','logout','unload' event_change)
+windower.register_event('zone change','job change','logout','unload', event_change)
 
 windower.register_event('lose buff', function(buff_id)
 	-- check buff_ids - leave battlefield (lvl restriction), Reive, Campaign, Besieged, Battlefield, Confrontation, Visitant, Voidwatcher, Pennant
