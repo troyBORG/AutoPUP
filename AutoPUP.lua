@@ -263,6 +263,8 @@ windower.register_event('addon command', function(...)
 		-- some debug option!
 		elseif commandArgs[1]:lower() == 'eval' then
 			assert(loadstring(table.concat(commandArgs, ' ',2)))()
+		else
+			error('Unknown command: '..commandArgs[1])
 		end
 	end
 	pup_status:text(display_box())
