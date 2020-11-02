@@ -1,7 +1,7 @@
-_addon.author = 'sruon'
+_addon.author = 'dtw'
 _addon.commands = {'autopup','pup'}
 _addon.name = 'AutoPUP'
-_addon.version = '1.0.0.0'
+_addon.version = '2.0.0.0'
 
 require('luau')
 require('pack')
@@ -67,7 +67,19 @@ end
 pup_status = texts.new(display_box(),settings.box,settings)
 pup_status:show()
 
-function do_stuff()
+function overload_handling()
+	-- if AutoCooldown is true and cooldown is off recast then use it
+	if settings.AutoCooldown and windower.ffxi.get_ability_recasts()[114] <= 0 then -- Cooldown
+		cast.JA("Cooldown")
+		-- set a longer delay than usual? Give time for JA to fire?
+		del = 1.2
+	-- if AutoOff is true then switch off actions
+	elseif settings.AutoOff then
+		settings.actions = false
+	end
+end
+
+function maneuver_handling()
 	-- stop if actions not set
 	if not settings.actions then return end
 	-- update the interval since do_stuff last run
@@ -94,15 +106,7 @@ function do_stuff()
 		local buffs = get.buffs()
 		-- are we overloaded?
 		if buffs.overload then
-			-- if AutoCooldown is true and cooldown is off recast then use it
-			if settings.AutoCooldown and windower.ffxi.get_ability_recasts()[114] <= 0 then -- Cooldown
-				cast.JA("Cooldown")
-				-- set a longer delay than usual? Give time for JA to fire?
-				del = 1.2
-			-- if AutoOff is true then switch off actions
-			elseif settings.AutoOff then
-				settings.actions = false
-			end
+			overload_handling()
 		end
 		-- do nothing if we can't do anything
 		if casting or paused or buffs.amnesia or buffs.stun or buffs.sleep or buffs.charm or buffs.terror or buffs.petrification or buffs.overload then return end
@@ -118,7 +122,16 @@ function do_stuff()
 	end
 end
 
-do_stuff:loop(interval)
+function list_maneuver_sets()
+    log('Listing maneuver sets:')
+    for key,_ in pairs(settings.maneuver_sets) do
+        if key ~= 'default' then
+            log('\t' .. key)
+        end
+    end
+end
+
+maneuver_handling:loop(interval)
 
 windower.register_event('incoming chunk', function(id,original,modified,injected,blocked)
 		-- this checks if we're casting
@@ -146,19 +159,10 @@ windower.register_event('incoming chunk', function(id,original,modified,injected
 	end
 end)
 
-function list_maneuver_sets()
-    log('Listing maneuver sets:')
-    for key,_ in pairs(settings.maneuver_sets) do
-        if key ~= 'default' then
-            log('\t' .. key)
-        end
-    end
-end
-
 windower.register_event('addon command', function(...)
 	local commandArgs = {...}
 	-- convert any autotrans in Args and overwrite Arg
-	for x=1,#commandArgs do commandArgs[x] = windower.convert_auto_trans(commandArgs[x]):lower() end
+	for x=1,#commandArgs do commandArgs[x] = windower.convert_auto_trans(commandArgs[x]) end
 	-- handle toggle with addon name and on/off
 	if not commandArgs[1] or S{'on','off'}:contains(commandArgs[1]) then
 		-- no args at all - toggle actions
@@ -259,6 +263,8 @@ windower.register_event('addon command', function(...)
 		-- some debug option!
 		elseif commandArgs[1]:lower() == 'eval' then
 			assert(loadstring(table.concat(commandArgs, ' ',2)))()
+		else
+			error('Unknown command: '..commandArgs[1])
 		end
 	end
 	pup_status:text(display_box())
