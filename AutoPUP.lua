@@ -299,8 +299,8 @@ windower.register_event('addon command', function(...)
 	pup_status:text(display_box())
 end)
 
-function event_change()
 	settings.actions = false
+function disable()
 	casting = false
 	paused = false
 	pup_status:text(display_box())
@@ -309,7 +309,7 @@ end
 function status_change(new,old)
 	casting = false
 	if new == 2 or new == 3 then
-		event_change()
+		disable()
 		return
 	elseif new == 33 then
 		paused = true
@@ -328,7 +328,7 @@ windower.register_event('lose buff', function(buff_id)
 	-- check buff_ids - leave battlefield (lvl restriction), Reive, Campaign, Besieged, Battlefield, Confrontation, Visitant, Voidwatcher, Pennant, Elvorseal
 	if settings.AutoStop and S{143,511,267,257,254,276,285,475,292,603}:contains(tonumber(buff_id)) then
 		-- stop everything
-		event_change()
+		disable()
 	end
 end)
 
@@ -336,6 +336,6 @@ windower.register_event('gain buff', function(buff_id)
 	-- check buff_ids - Invisible
 	if settings.AutoStop and S{69}:contains(tonumber(buff_id)) then
 		-- stop everything
-		event_change()
+		disable()
 	end
 end)
