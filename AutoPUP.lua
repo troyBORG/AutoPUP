@@ -35,6 +35,26 @@ defaults = {
 
 settings = config.load(defaults)
 
+function initialize()
+  local player = windower.ffxi.get_player()
+  if not player then
+    windower.send_command('@wait 5;lua i autopup initialize')
+    return
+  end
+	-- check job is PUP
+  if player.main_job_id == 18 then
+		-- check a pet is summoned
+    if player.pet_index then
+      enabled = true
+      main_function:loop(interval,enabled_check)
+			pup_status:show()
+    end
+  else
+		enabled = false
+		pup_status:hide()
+	end
+end
+
 -- set del (some delay) to zero on first run
 del = 0
 -- a counter?
@@ -68,7 +88,6 @@ local display_box = function()
 end
 
 pup_status = texts.new(display_box(),settings.box,settings)
-pup_status:show()
 
 -- get player
 local player = windower.ffxi.get_player()
@@ -136,8 +155,6 @@ function list_maneuver_sets()
         end
     end
 end
-
-main_function:loop(interval,enabled_check)
 
 windower.register_event('incoming chunk', function(id,original,modified,injected,blocked)
 		-- this checks if we're casting
