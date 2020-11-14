@@ -299,8 +299,8 @@ windower.register_event('addon command', function(...)
 	pup_status:text(display_box())
 end)
 
-	settings.actions = false
 function disable()
+	enabled = false
 	casting = false
 	paused = false
 	pup_status:text(display_box())
