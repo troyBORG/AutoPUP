@@ -69,6 +69,9 @@ end
 pup_status = texts.new(display_box(),settings.box,settings)
 pup_status:show()
 
+-- get player
+local player = windower.ffxi.get_player()
+
 function enabled_check()
   return enabled
 end
@@ -96,8 +99,6 @@ function main_function()
 		counter = 0
 		-- del is now interval so need at least two loops to trigger do_stuff
 		del = interval
-		-- get player
-		local player = windower.ffxi.get_player()
 		-- if can't get player, we're not PUP or status is not equal to 1 or 0 then end
 		if not player or player.main_job ~= 'PUP' or (player.status ~= 1 and player.status ~= 0) then return end
 		-- check we have a pet?
