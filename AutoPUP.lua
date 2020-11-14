@@ -35,6 +35,10 @@ defaults = {
 
 settings = config.load(defaults)
 
+petlessZones = S{50,235,234,224,284,233,70,257,251,14,242,250,226,245,
+                 237,249,131,53,252,231,236,246,232,240,247,243,223,248,230,
+                 26,71,244,239,238,241,256,257}
+
 function initialize()
   local player = windower.ffxi.get_player()
   if not player then
@@ -319,6 +323,27 @@ function status_change(new,old)
 		log('Actions Resumed')
 	end
 	pup_status:text(display_box())
+end
+
+function zone_check(to)
+  to = tonumber(to)
+  if player.main_job_id == 18 then
+    if petlessZones:contains(to) then
+      enabled = false
+			pup_status:hide()
+      return
+    else
+      local player_mob = windower.ffxi.get_mob_by_target('me')
+      if player_mob then
+        if player_mob.pet_index and player_mob.pet_index ~= 0 then
+					pup_status:text(display_box())
+					pup_status:show()
+        end
+      else
+        windower.send_command('@wait 10;lua i autopup zone_check ' .. to)
+      end
+    end
+  end
 end
 
 windower.register_event('status change', status_change)
