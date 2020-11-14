@@ -306,8 +306,8 @@ windower.register_event('status change', status_change)
 windower.register_event('zone change','job change','logout','unload', event_change)
 
 windower.register_event('lose buff', function(buff_id)
-	-- check buff_ids - leave battlefield (lvl restriction), Reive, Campaign, Besieged, Battlefield, Confrontation, Visitant, Voidwatcher, Pennant
-	if settings.AutoStop and S{143,511,267,257,254,276,285,475,292}:contains(tonumber(buff_id)) then
+	-- check buff_ids - leave battlefield (lvl restriction), Reive, Campaign, Besieged, Battlefield, Confrontation, Visitant, Voidwatcher, Pennant, Elvorseal
+	if settings.AutoStop and S{143,511,267,257,254,276,285,475,292,603}:contains(tonumber(buff_id)) then
 		-- stop everything
 		event_change()
 	end
