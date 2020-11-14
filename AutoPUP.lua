@@ -155,6 +155,7 @@ windower.register_event('incoming chunk', function(id,original,modified,injected
 		elseif packet['Category'] == 4 then
 			-- Finish Casting
 			casting = false
+			-- set standard delay
 			del = settings.delay
 		elseif L{3,5}:contains(packet['Category']) then
 			casting = false
