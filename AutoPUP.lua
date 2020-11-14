@@ -19,8 +19,8 @@ cast = require('pup_cast')
 defaults = {
 	-- set the delay
 	delay=1,
-	-- show active manuevers in display_box
-	active=true,
+	-- show set manuevers in display_box
+	ShowManeuvers=true,
 	-- toggle automatic cooldown on overload
 	AutoCooldown=false,
 	-- toggle actions off on overload
@@ -82,7 +82,7 @@ local display_box = function()
 			str = _addon.name..': Actions [Paused]'
 	end
 	-- return the string now if show active maneuvers is Off
-	if not settings.active then return str end
+	if not settings.ShowManeuvers then return str end
 	-- show active maneuvers
 	for k,v in pairs(maneuvers) do
 			str = str..'\n %s:[x%d]':format(k:ucfirst(),v)
@@ -211,6 +211,8 @@ windower.register_event('addon command', function(...)
 		log('Actions %s':format(enabled and 'On' or 'Off'))
 	elseif commandArgs[1] == 'list' then
 		list_maneuver_sets()
+	elseif commandArgs[1] == 'show' then
+		ShowManeuvers = not ShowManeuvers
 	elseif commandArgs[1] == 'help' then
 		log('Auto maneuvers command list:')
 		log('  1. help - Brings up this menu.')
@@ -219,6 +221,7 @@ windower.register_event('addon command', function(...)
 		log('  4. set <setname> - set pre-defined list of maneuvers.')
 		log('  5. saveset <setname> - save current manuever config as a pre-defined set.')
 		log('  6. save - save ALL settings for current user.')
+		log('  7. show - display set maneuvers for current user.')
 	else
 		-- save settings
 		if commandArgs[1] == 'save' then
