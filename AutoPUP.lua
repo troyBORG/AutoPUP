@@ -38,8 +38,8 @@ settings = config.load(defaults)
 del = 0
 -- a counter?
 counter = 0
--- how often to run do_stuff()
-interval = 0.2
+-- how often to run main_function()
+interval = 1
 -- set the active maneuvers to the default
 maneuvers = table.copy(settings.maneuver_sets.default)
 -- turn on the addon
