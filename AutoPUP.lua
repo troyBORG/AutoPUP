@@ -315,7 +315,7 @@ end
 
 function status_change(new,old)
 	casting = false
-	if new == 2 or new == 3 then
+	if S{2,3}:contains(new) then
 		disable()
 		return
 	elseif new == 33 then
