@@ -88,8 +88,6 @@ function overload_handling()
 	end
 end
 
-	-- stop if actions not set
-	if not settings.actions then return end
 function main_function()
 	-- update the interval since do_stuff last run
 	counter = counter + interval
