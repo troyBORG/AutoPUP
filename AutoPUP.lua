@@ -42,11 +42,13 @@ counter = 0
 interval = 0.2
 -- set the active maneuvers to the default
 maneuvers = table.copy(settings.maneuver_sets.default)
+-- turn on the addon
+enabled = true
 
 local display_box = function()
 	local str
 	-- set the status string
-	if settings.actions then
+	if enabled then
 			str = _addon.name..': Actions [On]'
 	else
 			str = _addon.name..': Actions [Off]'
@@ -67,6 +69,10 @@ end
 pup_status = texts.new(display_box(),settings.box,settings)
 pup_status:show()
 
+function enabled_check()
+  return enabled
+end
+
 function overload_handling()
 	-- if AutoCooldown is true and cooldown is off recast then use it
 	if settings.AutoCooldown and windower.ffxi.get_ability_recasts()[114] <= 0 then -- Cooldown
@@ -75,7 +81,7 @@ function overload_handling()
 		del = 1.2
 	-- if AutoOff is true then switch off actions
 	elseif settings.AutoOff then
-		settings.actions = false
+		enabled = false
 	end
 end
 
@@ -167,15 +173,15 @@ windower.register_event('addon command', function(...)
 	if not commandArgs[1] or S{'on','off'}:contains(commandArgs[1]) then
 		-- no args at all - toggle actions
 		if not commandArgs[1] then
-			settings.actions = not settings.actions
+			enabled = not enabled
 		-- if "on"
 		elseif commandArgs[1] == 'on' then
-			settings.actions = true
+			enabled = true
 		-- if "off"
 		elseif commandArgs[1] == 'off' then
-			settings.actions = false
+			enabled = false
 		end
-		log('Actions %s':format(settings.actions and 'On' or 'Off'))
+		log('Actions %s':format(enabled and 'On' or 'Off'))
 	elseif commandArgs[1] == 'list' then
 		list_maneuver_sets()
 	elseif commandArgs[1] == 'help' then
