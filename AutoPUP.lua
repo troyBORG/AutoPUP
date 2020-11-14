@@ -173,9 +173,14 @@ windower.register_event('addon command', function(...)
 		-- no args at all - toggle actions
 		if not commandArgs[1] then
 			enabled = not enabled
+			-- if "on" 
+			if enabled then
+				main_function:loop(interval,enabled_check)
+			end
 		-- if "on"
 		elseif commandArgs[1] == 'on' then
 			enabled = true
+			main_function:loop(interval,enabled_check)
 		-- if "off"
 		elseif commandArgs[1] == 'off' then
 			enabled = false
