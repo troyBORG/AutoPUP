@@ -1,5 +1,6 @@
 _addon.author = 'dtw'
 _addon.commands = {'autopup','pup'}
+--_addon.commands = {'on','off','help','list','set','saveset','save','show'}
 _addon.name = 'AutoPUP'
 _addon.version = '2.0.0.0'
 
@@ -89,13 +90,13 @@ function overload_handling()
 end
 
 function main_function()
-	-- update the interval since do_stuff last run
+	-- update the interval since main_function last run
 	counter = counter + interval
-	-- if the interval since last do_stuff is more than some delay (del - 0 by default) then try and run again
+	-- if the interval since last main_function is more than some delay (del - 0 by default) then try and run again
 	if counter > del then
 		-- enough time has elapsed so reset the counter
 		counter = 0
-		-- del is now interval so need at least two loops to trigger do_stuff
+		-- del is now interval so need at least two loops to trigger main_function
 		del = interval
 		-- if can't get player, we're not PUP or status is not equal to 1 or 0 then end
 		if not player or player.main_job ~= 'PUP' or (player.status ~= 1 and player.status ~= 0) then return end
@@ -174,7 +175,7 @@ windower.register_event('addon command', function(...)
 		-- no args at all - toggle actions
 		if not commandArgs[1] then
 			enabled = not enabled
-			-- if "on" 
+			-- if "on"
 			if enabled then
 				main_function:loop(interval,enabled_check)
 			end
