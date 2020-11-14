@@ -85,9 +85,9 @@ function overload_handling()
 	end
 end
 
-function maneuver_handling()
 	-- stop if actions not set
 	if not settings.actions then return end
+function main_function()
 	-- update the interval since do_stuff last run
 	counter = counter + interval
 	-- if the interval since last do_stuff is more than some delay (del - 0 by default) then try and run again
@@ -137,7 +137,7 @@ function list_maneuver_sets()
     end
 end
 
-maneuver_handling:loop(interval)
+main_function:loop(interval,enabled_check)
 
 windower.register_event('incoming chunk', function(id,original,modified,injected,blocked)
 		-- this checks if we're casting
