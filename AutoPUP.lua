@@ -45,10 +45,11 @@ function initialize()
     windower.send_command('@wait 5;lua i autopup initialize')
     return
   end
+	local playermob = windower.ffxi.get_mob_by_id(player.id)
 	-- check job is PUP
   if player.main_job_id == 18 then
 		-- check a pet is summoned
-    if player.pet_index then
+    if playermob.pet_index and playermob.pet_index ~= 0 then
       enabled = true
       main_function:loop(interval,enabled_check)
 			pup_status:show()
