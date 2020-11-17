@@ -53,7 +53,9 @@ function initialize()
       enabled = true
       main_function:loop(interval,enabled_check)
 			pup_status:show()
-    end
+    else
+			enabled = false
+		end
   else
 		enabled = false
 		pup_status:hide()
