@@ -1,5 +1,6 @@
 _addon.author = 'dtw'
 _addon.commands = {'autopup','pup'}
+--_addon.commands = {'on','off','help','list','set','saveset','save','show'}
 _addon.name = 'AutoPUP'
 _addon.version = '2.0.0.0'
 
@@ -38,15 +39,17 @@ settings = config.load(defaults)
 del = 0
 -- a counter?
 counter = 0
--- how often to run do_stuff()
-interval = 0.2
+-- how often to run main_function()
+interval = 1
 -- set the active maneuvers to the default
 maneuvers = table.copy(settings.maneuver_sets.default)
+-- turn on the addon
+enabled = true
 
 local display_box = function()
 	local str
 	-- set the status string
-	if settings.actions then
+	if enabled then
 			str = _addon.name..': Actions [On]'
 	else
 			str = _addon.name..': Actions [Off]'
@@ -67,6 +70,13 @@ end
 pup_status = texts.new(display_box(),settings.box,settings)
 pup_status:show()
 
+-- get player
+local player = windower.ffxi.get_player()
+
+function enabled_check()
+  return enabled
+end
+
 function overload_handling()
 	-- if AutoCooldown is true and cooldown is off recast then use it
 	if settings.AutoCooldown and windower.ffxi.get_ability_recasts()[114] <= 0 then -- Cooldown
@@ -75,23 +85,19 @@ function overload_handling()
 		del = 1.2
 	-- if AutoOff is true then switch off actions
 	elseif settings.AutoOff then
-		settings.actions = false
+		enabled = false
 	end
 end
 
-function maneuver_handling()
-	-- stop if actions not set
-	if not settings.actions then return end
-	-- update the interval since do_stuff last run
+function main_function()
+	-- update the interval since main_function last run
 	counter = counter + interval
-	-- if the interval since last do_stuff is more than some delay (del - 0 by default) then try and run again
+	-- if the interval since last main_function is more than some delay (del - 0 by default) then try and run again
 	if counter > del then
 		-- enough time has elapsed so reset the counter
 		counter = 0
-		-- del is now interval so need at least two loops to trigger do_stuff
+		-- del is now interval so need at least two loops to trigger main_function
 		del = interval
-		-- get player
-		local player = windower.ffxi.get_player()
 		-- if can't get player, we're not PUP or status is not equal to 1 or 0 then end
 		if not player or player.main_job ~= 'PUP' or (player.status ~= 1 and player.status ~= 0) then return end
 		-- check we have a pet?
@@ -131,7 +137,7 @@ function list_maneuver_sets()
     end
 end
 
-maneuver_handling:loop(interval)
+main_function:loop(interval,enabled_check)
 
 windower.register_event('incoming chunk', function(id,original,modified,injected,blocked)
 		-- this checks if we're casting
@@ -150,6 +156,7 @@ windower.register_event('incoming chunk', function(id,original,modified,injected
 		elseif packet['Category'] == 4 then
 			-- Finish Casting
 			casting = false
+			-- set standard delay
 			del = settings.delay
 		elseif L{3,5}:contains(packet['Category']) then
 			casting = false
@@ -167,15 +174,20 @@ windower.register_event('addon command', function(...)
 	if not commandArgs[1] or S{'on','off'}:contains(commandArgs[1]) then
 		-- no args at all - toggle actions
 		if not commandArgs[1] then
-			settings.actions = not settings.actions
+			enabled = not enabled
+			-- if "on"
+			if enabled then
+				main_function:loop(interval,enabled_check)
+			end
 		-- if "on"
 		elseif commandArgs[1] == 'on' then
-			settings.actions = true
+			enabled = true
+			main_function:loop(interval,enabled_check)
 		-- if "off"
 		elseif commandArgs[1] == 'off' then
-			settings.actions = false
+			enabled = false
 		end
-		log('Actions %s':format(settings.actions and 'On' or 'Off'))
+		log('Actions %s':format(enabled and 'On' or 'Off'))
 	elseif commandArgs[1] == 'list' then
 		list_maneuver_sets()
 	elseif commandArgs[1] == 'help' then
@@ -296,8 +308,8 @@ windower.register_event('status change', status_change)
 windower.register_event('zone change','job change','logout','unload', event_change)
 
 windower.register_event('lose buff', function(buff_id)
-	-- check buff_ids - leave battlefield (lvl restriction), Reive, Campaign, Besieged, Battlefield, Confrontation, Visitant, Voidwatcher, Pennant
-	if settings.AutoStop and S{143,511,267,257,254,276,285,475,292}:contains(tonumber(buff_id)) then
+	-- check buff_ids - leave battlefield (lvl restriction), Reive, Campaign, Besieged, Battlefield, Confrontation, Visitant, Voidwatcher, Pennant, Elvorseal
+	if settings.AutoStop and S{143,511,267,257,254,276,285,475,292,603}:contains(tonumber(buff_id)) then
 		-- stop everything
 		event_change()
 	end
