@@ -342,11 +342,9 @@ function zone_check(to)
       return
     else
       local player_mob = windower.ffxi.get_mob_by_target('me')
-      if player_mob then
-        if player_mob.pet_index and player_mob.pet_index ~= 0 then
-					pup_status:text(display_box())
-					pup_status:show()
-        end
+      if pet_check(player_mob) then
+				pup_status:text(display_box())
+				pup_status:show()
       else
         windower.send_command('@wait 10;lua i autopup zone_check ' .. to)
       end
