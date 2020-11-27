@@ -130,8 +130,6 @@ function main_function()
 		counter = 0
 		-- del is now interval so need at least two loops to trigger main_function
 		del = interval
-		-- if can't get player, we're not PUP or status is not equal to 1 or 0 then end
-		if not player or player.main_job ~= 'PUP' or (player.status ~= 1 and player.status ~= 0) then return end
 		-- check we have a pet?
 		if player ~= nil then
 			if not pet_check(player) then
@@ -322,7 +320,7 @@ end
 
 function status_change(new,old)
 	casting = false
-	if S{2,3}:contains(new) then
+	if not S{0,1}:contains(new) then
 		disable()
 		return
 	elseif new == 33 then
