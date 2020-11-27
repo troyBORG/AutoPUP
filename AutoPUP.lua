@@ -54,12 +54,9 @@ local display_box = function()
 	local str
 	-- set the status string
 	if running then
-			str = _addon.name..': Actions [running]'
+			str = _addon.name..': [running]'
 	else
-			str = _addon.name..': Actions [standby]'
-	end
-	if paused then
-			str = _addon.name..': Actions [paused]'
+			str = _addon.name..': [standby]'
 	end
 	-- return the string now if show active maneuvers is Off
 	if not settings.ShowManeuvers then return str end
@@ -151,7 +148,7 @@ function main_function()
 			overload_handling()
 		end
 		-- do nothing if we can't do anything
-		if casting or paused or buffs.amnesia or buffs.stun or buffs.sleep or buffs.charm or buffs.terror or buffs.petrification or buffs.overload then return end
+		if casting or buffs.amnesia or buffs.stun or buffs.sleep or buffs.charm or buffs.terror or buffs.petrification or buffs.overload then return end
 		-- check for if there are any inactive maneuvers that should be active
 		local maneuver = cast.check_maneuver(maneuvers,buffs)
 		-- there could be no inactive maneuvers so check not false
@@ -322,7 +319,6 @@ end)
 function disable()
 	running = false
 	casting = false
-	paused = false
 	pup_status:text(display_box())
 end
 
@@ -332,10 +328,10 @@ function status_change(new,old)
 		disable()
 		return
 	elseif new == 33 then
-		paused = true
+		running = false
 		warning('Actions Paused')
 	elseif old == 33 then
-		paused = false
+		running = true
 		log('Actions Resumed')
 	end
 	pup_status:text(display_box())
