@@ -39,31 +39,6 @@ petlessZones = S{50,235,234,224,284,233,70,257,251,14,242,250,226,245,
                  237,249,131,53,252,231,236,246,232,240,247,243,223,248,230,
                  26,71,244,239,238,241,256,257}
 
-function initialize()
-  local player = windower.ffxi.get_player()
-  if not player then
-    windower.send_command('@wait 5;lua i autopup initialize')
-    return
-  end
-	local playermob = windower.ffxi.get_mob_by_index(player.index)
-	-- check job is PUP
-  if player.main_job_id == 18 then
-		-- check a pet is summoned
-    if playermob.pet_index and playermob.pet_index ~= 0 then
-      running = true
-      main_function:loop(interval,running_check)
-			pup_status:show()
-    else
-			running = false
-			pup_status:show()
-		end
-  else
-		running = false
-		pup_status:hide()
-	end
-	log('status: '..tostring(running))
-end
-
 -- set del (some delay) to zero on first run
 del = 0
 -- a counter?
@@ -100,6 +75,31 @@ pup_status = texts.new(display_box(),settings.box,settings)
 
 -- get player
 local player = windower.ffxi.get_player()
+
+function initialize()
+  local player = windower.ffxi.get_player()
+  if not player then
+    windower.send_command('@wait 5;lua i autopup initialize')
+    return
+  end
+	local playermob = windower.ffxi.get_mob_by_index(player.index)
+	-- check job is PUP
+  if player.main_job_id == 18 then
+		-- check a pet is summoned
+    if playermob.pet_index and playermob.pet_index ~= 0 then
+      running = true
+      main_function:loop(interval,running_check)
+			pup_status:show()
+    else
+			running = false
+			pup_status:show()
+		end
+  else
+		running = false
+		pup_status:hide()
+	end
+	log('status: '..tostring(running))
+end
 
 function running_check()
   return running
