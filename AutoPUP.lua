@@ -217,7 +217,8 @@ windower.register_event('addon command', function(...)
 	elseif commandArgs[1] == 'list' then
 		list_maneuver_sets()
 	elseif commandArgs[1] == 'show' then
-		ShowManeuvers = not ShowManeuvers
+		settings.ShowManeuvers = not settings.ShowManeuvers
+		log('ShowManeuvers '..tostring(settings.ShowManeuvers))
 	elseif commandArgs[1] == 'help' then
 		log('Auto maneuvers command list:')
 		log('  1. help - Brings up this menu.')
