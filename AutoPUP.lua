@@ -320,7 +320,7 @@ end
 
 function status_change(new,old)
 	casting = false
-	if not S{0,1}:contains(new) then
+	if not S{0,1,33}:contains(new) then
 		disable()
 		return
 	elseif new == 33 then
