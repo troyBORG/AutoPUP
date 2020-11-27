@@ -359,7 +359,7 @@ function zone_check(to)
 end
 
 windower.register_event('status change', status_change)
-windower.register_event('load', 'job change', initialize)
+windower.register_event('login', 'load', 'job change', initialize)
 windower.register_event('logout','unload', disable)
 windower.register_event('zone change', zone_check)
 
