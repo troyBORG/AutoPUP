@@ -92,16 +92,15 @@ function initialize()
 		if pet_check(player) then
       running = true
       main_function:loop(interval,running_check)
-			pup_status:show()
     else
 			running = false
-			pup_status:show()
 		end
+		pup_status:show()
   else
 		running = false
 		pup_status:hide()
 	end
-	log('status: '..tostring(running))
+	pup_status:text(display_box())
 end
 
 function running_check()
