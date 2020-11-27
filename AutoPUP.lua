@@ -50,16 +50,18 @@ function initialize()
   if player.main_job_id == 18 then
 		-- check a pet is summoned
     if playermob.pet_index and playermob.pet_index ~= 0 then
-      enabled = true
-      main_function:loop(interval,enabled_check)
+      running = true
+      main_function:loop(interval,running_check)
 			pup_status:show()
     else
-			enabled = false
+			running = false
+			pup_status:show()
 		end
   else
-		enabled = false
+		running = false
 		pup_status:hide()
 	end
+	log('status: '..tostring(running))
 end
 
 -- set del (some delay) to zero on first run
@@ -71,18 +73,18 @@ interval = 1
 -- set the active maneuvers to the default
 maneuvers = table.copy(settings.maneuver_sets.default)
 -- turn on the addon
-enabled = true
+running = true
 
 local display_box = function()
 	local str
 	-- set the status string
-	if enabled then
-			str = _addon.name..': Actions [On]'
+	if running then
+			str = _addon.name..': Actions [running]'
 	else
-			str = _addon.name..': Actions [Off]'
+			str = _addon.name..': Actions [standby]'
 	end
 	if paused then
-			str = _addon.name..': Actions [Paused]'
+			str = _addon.name..': Actions [paused]'
 	end
 	-- return the string now if show active maneuvers is Off
 	if not settings.ShowManeuvers then return str end
@@ -99,8 +101,8 @@ pup_status = texts.new(display_box(),settings.box,settings)
 -- get player
 local player = windower.ffxi.get_player()
 
-function enabled_check()
-  return enabled
+function running_check()
+  return running
 end
 
 function overload_handling()
@@ -111,11 +113,12 @@ function overload_handling()
 		del = 1.2
 	-- if AutoOff is true then switch off actions
 	elseif settings.AutoOff then
-		enabled = false
+		running = false
 	end
 end
 
 function main_function()
+	log('loop')
 	-- update the interval since main_function last run
 	counter = counter + interval
 	-- if the interval since last main_function is more than some delay (del - 0 by default) then try and run again
@@ -198,20 +201,20 @@ windower.register_event('addon command', function(...)
 	if not commandArgs[1] or S{'on','off'}:contains(commandArgs[1]) then
 		-- no args at all - toggle actions
 		if not commandArgs[1] then
-			enabled = not enabled
+			running = not running
 			-- if "on"
-			if enabled then
-				main_function:loop(interval,enabled_check)
+			if running then
+				main_function:loop(interval,running_check)
 			end
 		-- if "on"
 		elseif commandArgs[1] == 'on' then
-			enabled = true
-			main_function:loop(interval,enabled_check)
+			running = true
+			main_function:loop(interval,running_check)
 		-- if "off"
 		elseif commandArgs[1] == 'off' then
-			enabled = false
+			running = false
 		end
-		log('Actions %s':format(enabled and 'On' or 'Off'))
+		log('Actions %s':format(running and 'On' or 'Off'))
 	elseif commandArgs[1] == 'list' then
 		list_maneuver_sets()
 	elseif commandArgs[1] == 'show' then
@@ -310,7 +313,7 @@ windower.register_event('addon command', function(...)
 end)
 
 function disable()
-	enabled = false
+	running = false
 	casting = false
 	paused = false
 	pup_status:text(display_box())
@@ -333,9 +336,9 @@ end
 
 function zone_check(to)
   to = tonumber(to)
+	running = false
   if player.main_job_id == 18 then
     if petlessZones:contains(to) then
-      enabled = false
 			pup_status:hide()
       return
     else
