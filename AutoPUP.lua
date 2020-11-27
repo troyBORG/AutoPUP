@@ -328,6 +328,7 @@ function status_change(new,old)
 		warning('Actions Paused')
 	elseif old == 33 then
 		running = true
+		main_function:loop(interval,running_check)
 		log('Actions Resumed')
 	end
 	pup_status:text(display_box())
