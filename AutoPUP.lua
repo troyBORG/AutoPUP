@@ -76,10 +76,12 @@ pup_status = texts.new(display_box(),settings.box,settings)
 -- get player
 local player = windower.ffxi.get_player()
 
-function pet_check()
+function pet_check(player)
 	local playermob = windower.ffxi.get_mob_by_index(player.index)
 	if playermob.pet_index and playermob.pet_index ~= 0 then
-		return
+		return true
+	else
+		return false
 	end
 end
 
@@ -92,7 +94,7 @@ function initialize()
 	-- check job is PUP
   if player.main_job_id == 18 then
 		-- check a pet is summoned
-		if pet_check then
+		if pet_check(player) then
       running = true
       main_function:loop(interval,running_check)
 			pup_status:show()
@@ -137,7 +139,7 @@ function main_function()
 		if not player or player.main_job ~= 'PUP' or (player.status ~= 1 and player.status ~= 0) then return end
 		-- check we have a pet?
 		if player ~= nil then
-			if not pet_check then
+			if not pet_check(player) then
 				running = false
 				return
 			end
