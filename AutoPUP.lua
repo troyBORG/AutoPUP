@@ -157,16 +157,16 @@ function main_function()
 end
 
 function list_maneuver_sets()
-    log('Listing maneuver sets:')
-    for key,_ in pairs(settings.maneuver_sets) do
-        if key ~= 'default' then
-            log('\t' .. key)
-        end
+  log('Listing maneuver sets:')
+  for key,_ in pairs(settings.maneuver_sets) do
+    if key ~= 'default' then
+      log('\t' .. key)
     end
+  end
 end
 
 windower.register_event('incoming chunk', function(id,original,modified,injected,blocked)
-		-- this checks if we're casting
+	-- this checks if we're casting
 	if id == 0x028 then
 		local packet = packets.parse('incoming', original)
 		if packet['Actor'] ~= windower.ffxi.get_mob_by_target('me').id then return false end
