@@ -76,17 +76,23 @@ pup_status = texts.new(display_box(),settings.box,settings)
 -- get player
 local player = windower.ffxi.get_player()
 
+function pet_check()
+	local playermob = windower.ffxi.get_mob_by_index(player.index)
+	if playermob.pet_index and playermob.pet_index ~= 0 then
+		return
+	end
+end
+
 function initialize()
   local player = windower.ffxi.get_player()
   if not player then
     windower.send_command('@wait 5;lua i autopup initialize')
     return
   end
-	local playermob = windower.ffxi.get_mob_by_index(player.index)
 	-- check job is PUP
   if player.main_job_id == 18 then
 		-- check a pet is summoned
-    if playermob.pet_index and playermob.pet_index ~= 0 then
+		if pet_check then
       running = true
       main_function:loop(interval,running_check)
 			pup_status:show()
@@ -131,10 +137,9 @@ function main_function()
 		if not player or player.main_job ~= 'PUP' or (player.status ~= 1 and player.status ~= 0) then return end
 		-- check we have a pet?
 		if player ~= nil then
-			local player_mob = windower.ffxi.get_mob_by_index(player.index)
-			if player_mob ~= nil then
-				local pet_index = player_mob.pet_index
-				if pet_index == nil then return end
+			if not pet_check then
+				running = false
+				return
 			end
 		end
 		-- get buffs
