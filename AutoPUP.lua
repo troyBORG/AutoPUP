@@ -47,8 +47,6 @@ counter = 0
 interval = 1
 -- set the active maneuvers to the default
 maneuvers = table.copy(settings.maneuver_sets.default)
--- turn on the addon
-running = true
 
 local display_box = function()
 	local str
