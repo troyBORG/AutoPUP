@@ -325,12 +325,12 @@ function status_change(new,old)
 		return
 	elseif new == 33 then
 		running = false
-		warning('Actions Paused')
+		warning('standby')
 	elseif old == 33 then
 		running = true
 		del = 2
 		main_function:loop(interval,running_check)
-		log('Actions Resumed')
+		notice('running')
 	end
 	pup_status:text(display_box())
 end
