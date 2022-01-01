@@ -50,12 +50,12 @@ local display_box = function()
 	local str
 	-- set the status string
 	if enabled then
-			str = _addon.name..': Actions [On]'
+			str = _addon.name..' [On]'
 	else
-			str = _addon.name..': Actions [Off]'
+			str = _addon.name..' [Off]'
 	end
 	if paused then
-			str = _addon.name..': Actions [Paused]'
+			str = _addon.name..' [Paused]'
 	end
 	-- return the string now if show active maneuvers is Off
 	if not settings.active then return str end
