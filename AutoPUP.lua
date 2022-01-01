@@ -291,6 +291,16 @@ end
 
 function status_change(new,old)
 	casting = false
+	if new == 1 then
+		windower.send_command('pup on')
+	elseif old == 0 then
+		windower.send_command('pup off')
+	end
+	pup_status:text(display_box())
+end
+
+function status_change(new,old)
+	casting = false
 	if new == 2 or new == 3 then
 		event_change()
 		return
@@ -298,6 +308,21 @@ function status_change(new,old)
 		paused = true
 		warning('Actions Paused')
 	elseif old == 33 then
+		paused = false
+		log('Actions Resumed')
+	end
+	pup_status:text(display_box())
+end
+
+function status_change(new,old)
+	casting = false
+	if new == 2 or new == 3 then
+		event_change()
+		return
+	elseif new == 4 then
+		paused = true
+		warning('Actions Paused')
+	elseif old == 4 then
 		paused = false
 		log('Actions Resumed')
 	end
@@ -329,6 +354,11 @@ windower.register_event('lose buff', function(buff_id)
 	-- check buff_ids - Invisible Off
 	if settings.AutoStop and S{69}:contains(tonumber(buff_id)) then
 		-- stop everything
+		paused = false
+		pup_status:text(display_box())
+	end
+end)
+
 windower.register_event('gain buff', function(buff_id)
 	-- check buff_ids - Mounted
 	if settings.AutoStop and S{252}:contains(tonumber(buff_id)) then
