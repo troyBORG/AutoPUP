@@ -291,16 +291,6 @@ end
 
 function status_change(new,old)
 	casting = false
-	if new == 1 then
-		windower.send_command('pup on')
-	elseif old == 0 then
-		windower.send_command('pup off')
-	end
-	pup_status:text(display_box())
-end
-
-function status_change(new,old)
-	casting = false
 	if new == 2 or new == 3 then
 		event_change()
 		return
@@ -308,21 +298,6 @@ function status_change(new,old)
 		paused = true
 		warning('Actions Paused')
 	elseif old == 33 then
-		paused = false
-		log('Actions Resumed')
-	end
-	pup_status:text(display_box())
-end
-
-function status_change(new,old)
-	casting = false
-	if new == 2 or new == 3 then
-		event_change()
-		return
-	elseif new == 4 then
-		paused = true
-		warning('Actions Paused')
-	elseif old == 4 then
 		paused = false
 		log('Actions Resumed')
 	end
