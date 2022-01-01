@@ -313,6 +313,7 @@ windower.register_event('lose buff', function(buff_id)
 		-- stop everything
 		event_change()
 	end
+	pup_status:text(display_box())
 end)
 
 windower.register_event('gain buff', function(buff_id)
