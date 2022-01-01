@@ -349,3 +349,8 @@ windower.register_event('lose buff', function(buff_id)
 
 	end
 end)
+
+windower.register_event('zone change', function()
+    windower.send_command('pup off')
+	pup_status:text(display_box())
+ end)
