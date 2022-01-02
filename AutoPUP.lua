@@ -321,7 +321,6 @@ windower.register_event('gain buff', function(buff_id)
 	if settings.AutoStop and S{69}:contains(tonumber(buff_id)) then
 		-- stop everything
 		paused = true
-		warning('Invisible')
 		pup_status:text(display_box())
 	end
 end)
@@ -340,7 +339,6 @@ windower.register_event('gain buff', function(buff_id)
 	if settings.AutoStop and S{252}:contains(tonumber(buff_id)) then
 		-- stop everything
 		paused = true
-		warning('Mounted')
 		pup_status:text(display_box())
 
 	end
